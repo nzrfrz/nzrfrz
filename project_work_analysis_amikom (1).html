@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Work Analysis — AI Academic Assistant AMIKOM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:wght@700;900&display=swap');
+
+:root {
+  --navy:#0A1628; --blue:#102240; --teal:#0D6B5E; --teal-lt:#12A090;
+  --gold:#C8972A; --gold-lt:#F0C050; --white:#EFF4FF; --gray:#7A90B8;
+  --red:#C53030; --amber:#B7681A; --card-bg:#0F1E38;
+  --card-b:rgba(13,107,94,0.28);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--navy);color:var(--white);font-family:'Inter',sans-serif;}
+
+/* ─── SLIDESHOW ─── */
+#deck{position:relative;width:100vw;height:100vh;}
+
+.slide{
+  display:none;
+  position:absolute;inset:0;
+  padding:44px 64px 80px;
+  overflow:hidden;
+  flex-direction:column;
+}
+.slide.active{display:flex;}
+
+/* ─── ANIMATIONS — only fire when slide is active ─── */
+.slide.active .ey   {animation:fadeUp .45s ease .05s both;}
+.slide.active .a1   {animation:fadeUp .45s ease .10s both;}
+.slide.active .a2   {animation:fadeUp .45s ease .22s both;}
+.slide.active .a3   {animation:fadeUp .45s ease .34s both;}
+.slide.active .a4   {animation:fadeUp .45s ease .46s both;}
+.slide.active .a5   {animation:fadeUp .45s ease .58s both;}
+.slide.active .s1   {animation:scaleIn .45s ease .10s both;}
+.slide.active .s2   {animation:scaleIn .45s ease .24s both;}
+.slide.active .s3   {animation:scaleIn .45s ease .38s both;}
+.slide.active .s4   {animation:scaleIn .45s ease .52s both;}
+.slide.active .s5   {animation:scaleIn .45s ease .66s both;}
+.slide.active .s6   {animation:scaleIn .45s ease .80s both;}
+.slide.active .bar  {animation:barGrow .8s ease .5s both;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+@keyframes barGrow{from{width:0}to{width:var(--w)}}
+
+/* ─── NAV ─── */
+#nav{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:12px;z-index:999;
+  background:rgba(10,22,40,.92);backdrop-filter:blur(14px);
+  border:.5px solid rgba(13,107,94,.4);border-radius:40px;
+  padding:9px 20px;
+}
+#nav button{background:none;border:none;color:var(--teal-lt);cursor:pointer;font-size:18px;padding:4px 10px;border-radius:6px;transition:background .15s;}
+#nav button:hover{background:rgba(13,107,94,.2);}
+#ctr{font-size:12px;color:var(--gray);min-width:46px;text-align:center;}
+.dots{display:flex;gap:6px;align-items:center;}
+.dots span{width:7px;height:7px;border-radius:50%;background:rgba(13,107,94,.3);cursor:pointer;transition:background .2s,transform .2s;}
+.dots span.on{background:var(--teal-lt);transform:scale(1.35);}
+#hint{position:fixed;bottom:22px;right:28px;font-size:11px;color:rgba(122,144,184,.35);pointer-events:none;}
+
+/* ─── TYPOGRAPHY ─── */
+.ey{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:10px;}
+.display{font-family:'Playfair Display',serif;font-weight:900;}
+h2.st{font-size:clamp(19px,2.4vw,30px);font-weight:700;line-height:1.2;margin-bottom:20px;}
+
+/* ─── CARD ─── */
+.card{background:var(--card-bg);border:.5px solid var(--card-b);border-radius:12px;padding:18px 20px;}
+
+/* ─── SCROLL ─── */
+.scr{overflow-y:auto;flex:1;}
+.scr::-webkit-scrollbar{width:3px;}
+.scr::-webkit-scrollbar-thumb{background:rgba(13,107,94,.3);border-radius:2px;}
+
+/* ─── BADGES ─── */
+.b-kritis{background:rgba(197,48,48,.2);color:#FC8181;}
+.b-tinggi{background:rgba(183,104,26,.2);color:#F6AD55;}
+.b-sedang{background:rgba(26,90,163,.2);color:#90CDF4;}
+.b-rendah{background:rgba(122,144,184,.12);color:var(--gray);}
+.bdg{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;}
+.ti{display:inline-block;font-size:10px;background:rgba(26,90,163,.2);color:#90CDF4;padding:2px 6px;border-radius:3px;margin:1px 2px 1px 0;}
+.tp{display:inline-block;font-size:10px;background:rgba(13,107,94,.2);color:#7DECD8;padding:2px 6px;border-radius:3px;margin:1px 2px 1px 0;}
+.to{display:inline-block;font-size:10px;background:rgba(200,151,42,.15);color:#F6AD55;padding:2px 6px;border-radius:3px;margin:1px 2px 1px 0;}
+.tr{display:inline-block;font-size:10px;background:rgba(197,48,48,.18);color:#FC8181;padding:2px 6px;border-radius:3px;margin:1px 2px 1px 0;}
+
+/* ─── DECORATIVE RINGS ─── */
+.ring{position:absolute;border-radius:50%;pointer-events:none;border:.5px solid rgba(13,107,94,.09);}
+
+/* ════════════════════════
+   S1 — COVER
+════════════════════════ */
+#s1{justify-content:center;}
+#s1 .tl{font-size:clamp(34px,4vw,54px);line-height:1.1;}
+#s1 .line{width:58px;height:3px;background:var(--teal-lt);border-radius:2px;margin:18px 0;}
+#s1 .sub{font-size:16px;color:var(--gray);line-height:1.6;max-width:560px;}
+#s1 .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;}
+#s1 .pill{background:rgba(13,107,94,.12);border:.5px solid rgba(13,107,94,.35);border-radius:99px;padding:5px 14px;font-size:12px;color:#7DECD8;}
+#s1 .hint2{position:absolute;bottom:76px;left:64px;font-size:12px;color:rgba(122,144,184,.3);}
+
+/* ════════════════════════
+   S2 — DOMAIN
+════════════════════════ */
+#s2 .dg{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;}
+#s2 .dc{background:var(--card-bg);border:.5px solid var(--card-b);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;}
+#s2 .dc .ico{font-size:22px;}
+#s2 .dc h3{font-size:13px;font-weight:600;color:#7DECD8;}
+#s2 .dc p{font-size:12px;color:var(--gray);line-height:1.6;}
+#s2 .dc .tg{display:inline-block;font-size:10px;font-weight:600;background:rgba(13,107,94,.15);color:var(--teal-lt);padding:3px 9px;border-radius:4px;margin-top:4px;}
+
+/* ════════════════════════
+   S3 — PROCESS FLOW
+════════════════════════ */
+#s3 .fw{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;}
+#s3 .row{display:flex;align-items:stretch;gap:0;}
+#s3 .fn{flex:1;background:var(--card-bg);border:.5px solid var(--card-b);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
+#s3 .fn.ac{border-color:rgba(13,160,144,.55);background:rgba(13,107,94,.12);}
+#s3 .fn .num{font-size:10px;font-weight:700;color:var(--teal-lt);letter-spacing:.06em;}
+#s3 .fn .ttl{font-size:12px;font-weight:600;color:var(--white);}
+#s3 .fn .sub{font-size:11px;color:var(--gray);line-height:1.5;}
+#s3 .arr{display:flex;align-items:center;padding:0 5px;color:var(--teal-lt);font-size:14px;font-weight:700;flex-shrink:0;}
+
+/* ════════════════════════
+   S4 — IPO TABLE
+════════════════════════ */
+#s4 table{width:100%;border-collapse:collapse;}
+#s4 th{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);padding:8px 10px;text-align:left;border-bottom:.5px solid rgba(13,107,94,.3);}
+#s4 td{padding:8px 10px;font-size:11.5px;vertical-align:top;border-bottom:.5px solid rgba(255,255,255,.04);}
+#s4 tr:last-child td{border-bottom:none;}
+#s4 tr:hover td{background:rgba(13,107,94,.05);}
+#s4 td:first-child{font-weight:600;color:#7DECD8;white-space:nowrap;font-size:11px;}
+
+/* ════════════════════════
+   S5 — PIC & RESOURCES
+════════════════════════ */
+#s5 .rg{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;}
+#s5 .rc{background:var(--card-bg);border:.5px solid var(--card-b);border-radius:12px;padding:15px 17px;display:flex;flex-direction:column;gap:7px;}
+#s5 .rc h3{font-size:12px;font-weight:700;color:#7DECD8;margin-bottom:2px;}
+#s5 .pr{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:.5px solid rgba(255,255,255,.04);}
+#s5 .pr:last-child{border-bottom:none;}
+#s5 .av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+#s5 .pn{font-size:12px;font-weight:500;color:var(--white);}
+#s5 .pr{font-size:11px;color:var(--gray);}
+#s5 .pa{font-size:11px;color:#7DECD8;margin-top:1px;}
+#s5 .ri{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;padding:5px 0;}
+#s5 .ric{font-size:13px;flex-shrink:0;margin-top:1px;}
+#s5 .rl{color:var(--white);font-weight:500;}
+#s5 .rs{color:var(--gray);font-size:11px;margin-top:1px;}
+
+/* ════════════════════════
+   S6 — BOTTLENECK
+════════════════════════ */
+#s6 .hg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:13px;}
+#s6 .hc{background:var(--card-bg);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+#s6 .hc.kr{border:.5px solid rgba(197,48,48,.45);}
+#s6 .hc.ti{border:.5px solid rgba(183,104,26,.4);}
+#s6 .hc.sd{border:.5px solid rgba(26,90,163,.35);}
+#s6 .hl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;}
+#s6 .hc.kr .hl{color:#FC8181;}
+#s6 .hc.ti .hl{color:#F6AD55;}
+#s6 .hc.sd .hl{color:#90CDF4;}
+#s6 .ht{font-size:12.5px;font-weight:600;color:var(--white);}
+#s6 .hd{font-size:11.5px;color:var(--gray);line-height:1.55;}
+#s6 .hm{font-size:11px;color:#7DECD8;margin-top:2px;}
+
+/* ════════════════════════
+   S7 — INSIGHTS
+════════════════════════ */
+#s7 .ig{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;}
+#s7 .ic{background:var(--card-bg);border-radius:12px;padding:15px 17px;display:flex;flex-direction:column;gap:7px;}
+#s7 .ic.cr{border:.5px solid rgba(197,48,48,.4);}
+#s7 .ic.go{border:.5px solid rgba(200,151,42,.3);}
+#s7 .ic.re{border:.5px solid rgba(13,107,94,.4);}
+#s7 .ih{font-size:12px;font-weight:700;margin-bottom:4px;}
+#s7 .ic.cr .ih{color:#FC8181;}
+#s7 .ic.go .ih{color:#F6AD55;}
+#s7 .ic.re .ih{color:#7DECD8;}
+#s7 ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+#s7 ul li{font-size:12px;color:var(--gray);padding-left:14px;position:relative;line-height:1.5;}
+#s7 ul li::before{content:'›';position:absolute;left:0;color:var(--teal-lt);font-weight:700;}
+#s7 ul li strong{color:var(--white);}
+#s7 .rr{display:flex;gap:9px;align-items:flex-start;padding:5px 0;border-bottom:.5px solid rgba(255,255,255,.04);}
+#s7 .rr:last-child{border-bottom:none;}
+#s7 .rn{width:21px;height:21px;border-radius:50%;background:rgba(13,107,94,.18);border:.5px solid var(--teal-lt);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--teal-lt);flex-shrink:0;}
+#s7 .rb{font-size:11.5px;color:var(--gray);line-height:1.5;}
+#s7 .rb strong{color:var(--white);display:block;margin-bottom:1px;font-size:12px;}
+
+/* ════════════════════════
+   S8 — VALUE DELIVERY
+════════════════════════ */
+#s8 .vr{display:flex;align-items:stretch;gap:0;flex:1;}
+#s8 .vi{flex:1;background:var(--card-bg);border:.5px solid var(--card-b);padding:16px 10px;display:flex;flex-direction:column;gap:6px;text-align:center;position:relative;}
+#s8 .vi:first-child{border-radius:12px 0 0 12px;}
+#s8 .vi:last-child{border-radius:0 12px 12px 0;}
+#s8 .vi+.vi{border-left:none;}
+#s8 .va{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--navy);border:.5px solid var(--teal-lt);display:flex;align-items:center;justify-content:center;color:var(--teal-lt);font-size:11px;font-weight:700;z-index:5;}
+#s8 .vo{font-size:22px;}
+#s8 .vt{font-size:11px;font-weight:700;color:#7DECD8;}
+#s8 .vd2{font-size:10px;color:var(--teal-lt);font-weight:600;margin-top:1px;}
+#s8 .vdesc{font-size:10.5px;color:var(--gray);line-height:1.5;margin-top:3px;}
+#s8 .vf{margin-top:14px;padding:12px 16px;background:rgba(13,107,94,.08);border:.5px solid rgba(13,107,94,.25);border-radius:9px;font-size:12px;color:var(--gray);line-height:1.65;}
+#s8 .vf strong{color:var(--white);}
+
+/* ════════════════════════
+   S9 — CLOSING
+════════════════════════ */
+#s9{justify-content:center;align-items:center;text-align:center;}
+#s9 .ng{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0;width:100%;}
+#s9 .nc{background:var(--card-bg);border:.5px solid var(--card-b);border-radius:12px;padding:18px 14px;}
+#s9 .nn{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:var(--teal-lt);line-height:1;}
+#s9 .nl{font-size:11px;color:var(--gray);margin-top:5px;}
+#s9 .ns{font-size:12px;color:var(--white);margin-top:2px;font-weight:500;}
+#s9 .foot{max-width:640px;font-size:13.5px;color:var(--gray);line-height:1.7;}
+#s9 .foot strong{color:var(--white);}
+#s9 .foot em{color:#7DECD8;font-style:normal;}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 — COVER
+══════════════════════════════════════════ -->
+<section class="slide active" id="s1">
+  <div class="ey">Manajemen Proyek · PMBOK® Guide Seventh Edition</div>
+  <div class="tl display a1">Project Work<br>Analysis</div>
+  <div class="line a2"></div>
+  <p class="sub a2">AI Academic Assistant<br><strong style="color:var(--white);">Universitas AMIKOM Yogyakarta</strong></p>
+  <div class="pills a3">
+    <span class="pill">Project Work Domain</span>
+    <span class="pill">7 Aktivitas Utama</span>
+    <span class="pill">Input–Proses–Output</span>
+    <span class="pill">Bottleneck Analysis</span>
+    <span class="pill">Value Delivery System</span>
+  </div>
+  <div class="hint2">Gunakan tombol ← → atau tekan panah keyboard untuk navigasi</div>
+  <div class="ring" style="right:-100px;top:-100px;width:460px;height:460px;"></div>
+  <div class="ring" style="right:-45px;top:-45px;width:300px;height:300px;border-color:rgba(13,107,94,.14);"></div>
+  <div class="ring" style="right:35px;top:35px;width:165px;height:165px;border-color:rgba(13,107,94,.22);"></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 — PROJECT WORK DOMAIN
+══════════════════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="ey">01 — Project Work Domain</div>
+  <h2 class="st a1">Apa itu Project Work Domain?</h2>
+  <div class="dg">
+    <div class="dc s1">
+      <div class="ico">⚙️</div>
+      <h3>Definisi</h3>
+      <p>Domain kinerja PMBOK® VII yang mencakup semua aktivitas pelaksanaan pekerjaan nyata dalam proyek — mulai dari pengadaan sumber daya, koordinasi tim, hingga penyelesaian deliverable teknis AI Academic Assistant AMIKOM.</p>
+      <span class="tg">Performance Domain</span>
+    </div>
+    <div class="dc s2">
+      <div class="ico">🔄</div>
+      <h3>Fokus Utama</h3>
+      <p>Memastikan pekerjaan dijalankan secara <em style="color:var(--white);">efisien dan efektif</em> sesuai rencana, dengan mengelola proses, sumber daya, komunikasi, dan hambatan yang muncul selama eksekusi proyek AI.</p>
+      <span class="tg">Execution &amp; Delivery</span>
+    </div>
+    <div class="dc s3">
+      <div class="ico">🧩</div>
+      <h3>Metode Analisis</h3>
+      <p><strong style="color:var(--white);">Work Breakdown Analysis + IPO Framework</strong> — mengurai setiap aktivitas menjadi Input, Proses, Output, disertai identifikasi PIC, sumber daya, dan hambatan potensial per fase.</p>
+      <span class="tg">IPO + WBA Method</span>
+    </div>
+    <div class="dc s4">
+      <div class="ico">🎯</div>
+      <h3>Outcome yang Diharapkan</h3>
+      <p>Pelaksanaan proyek yang terstruktur dengan visibilitas penuh terhadap progres, bottleneck teridentifikasi lebih awal, dan setiap deliverable AI Academic Assistant terpenuhi tepat waktu.</p>
+      <span class="tg">Controlled Execution</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 — PROCESS FLOW
+══════════════════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="ey">02 — Aktivitas Utama Proyek</div>
+  <h2 class="st a1">Process Flow — 7 Fase Utama</h2>
+  <div class="fw">
+    <div class="row a2">
+      <div class="fn ac s1">
+        <div class="num">FASE 01</div>
+        <div class="ttl">📋 Perencanaan &amp; Scoping</div>
+        <div class="sub">Requirement gathering dari dosen &amp; mahasiswa, penyusunan WBS, jadwal sprint, project charter</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="fn s2">
+        <div class="num">FASE 02</div>
+        <div class="ttl">🗄️ Pengadaan Data &amp; Infrastruktur</div>
+        <div class="sub">Kurasi dataset akademik, setup server &amp; cloud, konfigurasi keamanan, SLA vendor AI</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="fn s3">
+        <div class="num">FASE 03</div>
+        <div class="ttl">🤖 Pengembangan Model AI</div>
+        <div class="sub">Training &amp; fine-tuning model, integrasi basis pengetahuan AMIKOM, NLP Bahasa Indonesia</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="fn s4">
+        <div class="num">FASE 04</div>
+        <div class="ttl">🖥️ Pengembangan Platform</div>
+        <div class="sub">UI/UX web &amp; mobile, backend API, integrasi SIAKAD &amp; LMS, dashboard admin</div>
+      </div>
+    </div>
+    <div class="row a3" style="justify-content:center;max-width:80%;margin:0 auto;">
+      <div class="fn s5" style="max-width:32%;">
+        <div class="num">FASE 05</div>
+        <div class="ttl">🧪 Pengujian &amp; QA</div>
+        <div class="sub">UAT dosen &amp; mahasiswa, pengujian akurasi AI, load testing, bug fix iteratif</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="fn s6" style="max-width:32%;">
+        <div class="num">FASE 06</div>
+        <div class="ttl">🚀 Deployment &amp; Go-Live</div>
+        <div class="sub">Piloting terbatas, pelatihan end-user, migrasi data produksi, aktivasi monitoring</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="fn ac s4" style="max-width:32%;">
+        <div class="num">FASE 07</div>
+        <div class="ttl">🔁 Monitoring &amp; Optimasi</div>
+        <div class="sub">Pemantauan performa AI, retraining model, feedback loop, update fitur iteratif</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 — IPO TABLE
+══════════════════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="ey">03 — Input · Proses · Output</div>
+  <h2 class="st a1">IPO Framework per Aktivitas</h2>
+  <div class="scr a2">
+    <table>
+      <thead>
+        <tr>
+          <th>Aktivitas</th>
+          <th>Input</th>
+          <th>Proses</th>
+          <th>Output</th>
+          <th>Hambatan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>📋 Perencanaan &amp; Scoping</td>
+          <td><span class="ti">Kebutuhan akademik</span><span class="ti">Kebijakan kampus</span><span class="ti">Anggaran awal</span></td>
+          <td><span class="tp">Workshop requirement</span><span class="tp">Penyusunan WBS</span><span class="tp">Sprint planning</span></td>
+          <td><span class="to">Dokumen scope</span><span class="to">Project charter</span><span class="to">Product backlog</span></td>
+          <td><span class="tr">Scope creep</span><span class="tr">Stakeholder tidak sepakat</span></td>
+        </tr>
+        <tr>
+          <td>🗄️ Pengadaan Data &amp; Infrastruktur</td>
+          <td><span class="ti">Dataset kurikulum</span><span class="ti">Anggaran TI</span><span class="ti">Spesifikasi teknis</span></td>
+          <td><span class="tp">Kurasi &amp; labeling data</span><span class="tp">Setup cloud/server</span><span class="tp">Konfigurasi keamanan</span></td>
+          <td><span class="to">Dataset terstruktur</span><span class="to">Infrastruktur siap</span><span class="to">SLA vendor</span></td>
+          <td><span class="tr">Kualitas data buruk</span><span class="tr">Keterlambatan vendor</span></td>
+        </tr>
+        <tr>
+          <td>🤖 Pengembangan Model AI</td>
+          <td><span class="ti">Dataset berlabel</span><span class="ti">Model pre-trained</span><span class="ti">Framework NLP</span></td>
+          <td><span class="tp">Fine-tuning model</span><span class="tp">Validasi akurasi</span><span class="tp">Iterasi prompt</span></td>
+          <td><span class="to">Model AI terlatih</span><span class="to">API endpoint</span><span class="to">Dokumentasi model</span></td>
+          <td><span class="tr">Akurasi di bawah target</span><span class="tr">Biaya komputasi tinggi</span></td>
+        </tr>
+        <tr>
+          <td>🖥️ Pengembangan Platform</td>
+          <td><span class="ti">Wireframe UX</span><span class="ti">API model AI</span><span class="ti">Spesifikasi integrasi</span></td>
+          <td><span class="tp">Frontend development</span><span class="tp">Backend &amp; API gateway</span><span class="tp">Integrasi SIAKAD/LMS</span></td>
+          <td><span class="to">Aplikasi web/mobile</span><span class="to">Sistem terintegrasi</span><span class="to">Dashboard admin</span></td>
+          <td><span class="tr">Inkompatibilitas legacy system</span><span class="tr">Perubahan requirement</span></td>
+        </tr>
+        <tr>
+          <td>🧪 Pengujian &amp; QA</td>
+          <td><span class="ti">Aplikasi build</span><span class="ti">Skenario pengujian</span><span class="ti">Beta tester</span></td>
+          <td><span class="tp">UAT dosen &amp; mahasiswa</span><span class="tp">Pengujian performa AI</span><span class="tp">Bug fix iterasi</span></td>
+          <td><span class="to">Laporan UAT</span><span class="to">Aplikasi terverifikasi</span><span class="to">Bug list terselesaikan</span></td>
+          <td><span class="tr">Partisipasi rendah</span><span class="tr">Bug kritis terlambat ditemukan</span></td>
+        </tr>
+        <tr>
+          <td>🚀 Deployment &amp; Go-Live</td>
+          <td><span class="ti">Aplikasi terverifikasi</span><span class="ti">Rencana rollout</span><span class="ti">Materi pelatihan</span></td>
+          <td><span class="tp">Piloting terbatas</span><span class="tp">Pelatihan end-user</span><span class="tp">Migrasi data produksi</span></td>
+          <td><span class="to">Sistem live di kampus</span><span class="to">User terlatih</span><span class="to">Go-live report</span></td>
+          <td><span class="tr">Resistensi pengguna</span><span class="tr">Downtime saat migrasi</span></td>
+        </tr>
+        <tr>
+          <td>🔁 Monitoring &amp; Optimasi</td>
+          <td><span class="ti">Data penggunaan real</span><span class="ti">Laporan error</span><span class="ti">KPI performa AI</span></td>
+          <td><span class="tp">Analisis log sistem</span><span class="tp">Retraining model</span><span class="tp">Feature update sprint</span></td>
+          <td><span class="to">Model AI diperbarui</span><span class="to">Laporan performa</span><span class="to">Peningkatan fitur</span></td>
+          <td><span class="tr">Model drift</span><span class="tr">Anggaran maintenance kurang</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 — PIC & RESOURCES
+══════════════════════════════════════════ -->
+<section class="slide" id="s5">
+  <div class="ey">04 — Penanggung Jawab &amp; Sumber Daya</div>
+  <h2 class="st a1">PIC &amp; Resource Mapping</h2>
+  <div class="rg">
+    <!-- PIC -->
+    <div class="rc s1">
+      <h3>👤 Penanggung Jawab (PIC)</h3>
+      <div class="pr">
+        <div class="av" style="background:rgba(197,48,48,.2);color:#FC8181;">PM</div>
+        <div><div class="pn">Project Manager</div><div style="font-size:11px;color:var(--gray);">Koordinasi keseluruhan proyek</div><div class="pa">Scoping · Perencanaan · Go-Live · Monitoring</div></div>
+      </div>
+      <div class="pr">
+        <div class="av" style="background:rgba(13,107,94,.2);color:#7DECD8;">AI</div>
+        <div><div class="pn">AI/ML Engineer</div><div style="font-size:11px;color:var(--gray);">Pengembangan &amp; training model AI</div><div class="pa">Model AI · Fine-tuning · Optimasi</div></div>
+      </div>
+      <div class="pr">
+        <div class="av" style="background:rgba(26,90,163,.2);color:#90CDF4;">BE</div>
+        <div><div class="pn">Backend Developer</div><div style="font-size:11px;color:var(--gray);">API, server, integrasi sistem</div><div class="pa">Platform · Integrasi SIAKAD/LMS</div></div>
+      </div>
+      <div class="pr">
+        <div class="av" style="background:rgba(183,104,26,.2);color:#F6AD55;">FE</div>
+        <div><div class="pn">Frontend / UX Developer</div><div style="font-size:11px;color:var(--gray);">Antarmuka pengguna web &amp; mobile</div><div class="pa">Platform · UAT · Deployment</div></div>
+      </div>
+      <div class="pr">
+        <div class="av" style="background:rgba(122,144,184,.15);color:var(--gray);">DS</div>
+        <div><div class="pn">Data Scientist</div><div style="font-size:11px;color:var(--gray);">Dataset, labeling, evaluasi model</div><div class="pa">Pengadaan data · Validasi akurasi</div></div>
+      </div>
+      <div class="pr">
+        <div class="av" style="background:rgba(13,107,94,.15);color:#7DECD8;">QA</div>
+        <div><div class="pn">QA Engineer</div><div style="font-size:11px;color:var(--gray);">Pengujian fungsional &amp; performa</div><div class="pa">Pengujian · UAT · Laporan bug</div></div>
+      </div>
+      <div class="pr">
+        <div class="av" style="background:rgba(200,151,42,.15);color:#F6AD55;">DI</div>
+        <div><div class="pn">Direktorat IT AMIKOM</div><div style="font-size:11px;color:var(--gray);">Infrastruktur &amp; keamanan data</div><div class="pa">Server · Jaringan · SLA vendor</div></div>
+      </div>
+    </div>
+    <!-- Resources -->
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <div class="rc s2">
+        <h3>💻 Sumber Daya Teknologi</h3>
+        <div class="ri"><div class="ric">🖥️</div><div><div class="rl">Server &amp; Cloud Computing</div><div class="rs">GPU server untuk training AI, cloud storage dataset, CDN untuk performa</div></div></div>
+        <div class="ri"><div class="ric">🧠</div><div><div class="rl">Platform AI &amp; Framework</div><div class="rs">LLM base model, PyTorch/TensorFlow, vector database, RAG pipeline</div></div></div>
+        <div class="ri"><div class="ric">🔗</div><div><div class="rl">Sistem Akademik Eksisting</div><div class="rs">SIAKAD, LMS, repositori materi kuliah AMIKOM sebagai basis pengetahuan</div></div></div>
+      </div>
+      <div class="rc s3">
+        <h3>👥 Sumber Daya Manusia</h3>
+        <div class="ri"><div class="ric">🧑‍💻</div><div><div class="rl">Tim Inti (6–8 orang)</div><div class="rs">PM, 2 AI/ML Engineer, 2 Developer, 1 Data Scientist, 1 QA, 1 UX</div></div></div>
+        <div class="ri"><div class="ric">🎓</div><div><div class="rl">Subject Matter Expert</div><div class="rs">Dosen senior sebagai validator konten akademik dan kurikulum AI</div></div></div>
+        <div class="ri"><div class="ric">🧑‍🎓</div><div><div class="rl">Beta Tester</div><div class="rs">50–100 mahasiswa &amp; 10–15 dosen untuk UAT dan pilot testing sistem</div></div></div>
+      </div>
+      <div class="rc s4">
+        <h3>💰 Sumber Daya Anggaran</h3>
+        <div class="ri"><div class="ric">📦</div><div><div class="rl">Infrastruktur &amp; Lisensi</div><div class="rs">Server, cloud, API AI komersial, tools pengembangan, keamanan data</div></div></div>
+        <div class="ri"><div class="ric">📅</div><div><div class="rl">Operasional Tim</div><div class="rs">Honor tim, pelatihan, workshop, dokumentasi, change management</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 — BOTTLENECK
+══════════════════════════════════════════ -->
+<section class="slide" id="s6">
+  <div class="ey">05 — Bottleneck &amp; Hambatan</div>
+  <h2 class="st a1">Identifikasi Hambatan Proyek</h2>
+  <div class="hg">
+    <div class="hc kr s1">
+      <div class="hl">🔴 Kritis</div>
+      <div class="ht">Kualitas &amp; Kelengkapan Dataset</div>
+      <div class="hd">Data akademik AMIKOM tidak terstruktur, inkonsisten, atau tidak cukup untuk melatih model AI dengan akurasi tinggi.</div>
+      <div class="hm">→ Alokasikan 20% waktu untuk kurasi data; libatkan dosen sebagai annotator.</div>
+    </div>
+    <div class="hc kr s2">
+      <div class="hl">🔴 Kritis</div>
+      <div class="ht">Akurasi Model AI di Bawah Target</div>
+      <div class="hd">Model gagal menjawab pertanyaan akademik spesifik AMIKOM karena fine-tuning konteks lokal Bahasa Indonesia kurang optimal.</div>
+      <div class="hm">→ Tetapkan threshold akurasi 85% sebagai gate; iterasi sprint 2 minggu.</div>
+    </div>
+    <div class="hc kr s3">
+      <div class="hl">🔴 Kritis</div>
+      <div class="ht">Integrasi Sistem Lama (Legacy)</div>
+      <div class="hd">SIAKAD dan LMS AMIKOM memiliki arsitektur lama tanpa API standar, menyulitkan integrasi dengan platform AI baru.</div>
+      <div class="hm">→ Buat middleware/adapter layer; sesi teknis dengan Direktorat IT sejak awal.</div>
+    </div>
+    <div class="hc ti s4">
+      <div class="hl">🟠 Tinggi</div>
+      <div class="ht">Resistensi Pengguna (Dosen)</div>
+      <div class="hd">Dosen khawatir peran pengajaran tergantikan AI, sehingga tidak kooperatif dalam UAT dan validasi konten akademik.</div>
+      <div class="hm">→ Change management intensif; posisikan AI sebagai "asisten", bukan pengganti.</div>
+    </div>
+    <div class="hc ti s5">
+      <div class="hl">🟠 Tinggi</div>
+      <div class="ht">Keterbatasan Anggaran &amp; SDM AI</div>
+      <div class="hd">Talenta AI/ML berpengalaman terbatas; biaya GPU cloud untuk training model sangat tinggi untuk skala kampus.</div>
+      <div class="hm">→ Kolaborasi dengan prodi Informatika AMIKOM; manfaatkan free-tier cloud GPU.</div>
+    </div>
+    <div class="hc sd s6">
+      <div class="hl">🔵 Sedang</div>
+      <div class="ht">Scope Creep &amp; Perubahan Requirement</div>
+      <div class="hd">Stakeholder meminta penambahan fitur di tengah pengembangan tanpa mempertimbangkan dampak jadwal dan anggaran.</div>
+      <div class="hm">→ Terapkan Change Control Board; setiap perubahan wajib melewati impact assessment.</div>
+    </div>
+  </div>
+  <div class="a3" style="padding:10px 16px;background:rgba(200,151,42,.07);border:.5px solid rgba(200,151,42,.22);border-radius:9px;font-size:12px;color:var(--gray);line-height:1.6;">
+    <strong style="color:var(--white);">⚡ Bottleneck Utama:</strong> Fase 03 (Pengembangan Model AI) adalah bottleneck terbesar — kegagalan di sini menghambat seluruh fase berikutnya. Alokasikan buffer 30% ekstra dan tetapkan go/no-go checkpoint sebelum lanjut ke Fase 04.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 7 — INSIGHTS & REKOMENDASI
+══════════════════════════════════════════ -->
+<section class="slide" id="s7">
+  <div class="ey">06 — Insights &amp; Rekomendasi</div>
+  <h2 class="st a1">Analisis Kritis &amp; Strategi Efektivitas</h2>
+  <div class="ig">
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <div class="ic cr s1">
+        <div class="ih">⚠ Aktivitas Paling Menentukan</div>
+        <ul>
+          <li><strong>Pengembangan Model AI (Fase 03)</strong> — Jantung proyek. Akurasi di bawah threshold merusak kepercayaan seluruh pengguna sebelum proyek berkembang.</li>
+          <li><strong>Pengujian &amp; UAT (Fase 05)</strong> — Kegagalan menemukan bug kritis sebelum go-live dapat menyebabkan sistem tidak bisa digunakan dan merusak reputasi AMIKOM.</li>
+          <li><strong>Perencanaan &amp; Scoping (Fase 01)</strong> — Scope yang tidak terdefinisi jelas di awal menjadi akar dari hampir semua masalah fase berikutnya.</li>
+        </ul>
+      </div>
+      <div class="ic go s2">
+        <div class="ih">⚡ Potensi Bottleneck Tersembunyi</div>
+        <ul>
+          <li><strong>Data Pipeline</strong> — Kurasi dan labeling data memakan waktu jauh lebih lama dari estimasi. Mulai paralel dengan perencanaan, bukan setelahnya.</li>
+          <li><strong>Integrasi Legacy System</strong> — SIAKAD/LMS lama sering menjadi blocker yang tidak terdeteksi hingga sprint integrasi dimulai.</li>
+          <li><strong>Review Loop Dosen</strong> — Validasi konten akademik sering lambat karena tidak masuk prioritas kerja dosen.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ic re s3" style="display:flex;flex-direction:column;">
+      <div class="ih" style="margin-bottom:6px;">💡 Rekomendasi Peningkatan Efektivitas</div>
+      <div class="rr">
+        <div class="rn">1</div>
+        <div class="rb"><strong>Terapkan Agile/Scrum Hybrid</strong>Sprint 2 minggu dengan demo ke stakeholder setiap akhir sprint. Perubahan requirement masuk backlog, bukan langsung ke sprint berjalan.</div>
+      </div>
+      <div class="rr">
+        <div class="rn">2</div>
+        <div class="rb"><strong>Data-First Approach</strong>Mulai kurasi dan labeling dataset sejak Fase 01 secara paralel. Jangan tunggu Fase 02 selesai untuk mempersiapkan data training model.</div>
+      </div>
+      <div class="rr">
+        <div class="rn">3</div>
+        <div class="rb"><strong>Go/No-Go Checkpoint Formal</strong>Tetapkan kriteria terukur (akurasi ≥85%, latency &lt;2 detik) sebagai gate wajib sebelum lanjut ke fase berikutnya.</div>
+      </div>
+      <div class="rr">
+        <div class="rn">4</div>
+        <div class="rb"><strong>Dedicated Integration Taskforce</strong>Bentuk tim kecil (1 backend dev + 1 staf IT AMIKOM) khusus menangani integrasi SIAKAD/LMS sejak awal proyek.</div>
+      </div>
+      <div class="rr">
+        <div class="rn">5</div>
+        <div class="rb"><strong>Change Control Board (CCB)</strong>Setiap perubahan requirement wajib melewati CCB yang menilai dampak terhadap scope, jadwal, dan anggaran sebelum disetujui.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 8 — VALUE DELIVERY
+══════════════════════════════════════════ -->
+<section class="slide" id="s8">
+  <div class="ey">07 — Value Delivery System</div>
+  <h2 class="st a1">Kontribusi Project Work terhadap Value Delivery AMIKOM</h2>
+  <div class="vr a2">
+    <div class="vi">
+      <div class="vo">🎯</div>
+      <div class="vt">Identifikasi Value</div>
+      <div class="vd2">Perencanaan &amp; Scoping</div>
+      <div class="vdesc">Requirement dari dosen &amp; mahasiswa → fitur AI yang relevan dan bernilai nyata</div>
+      <div class="va">→</div>
+    </div>
+    <div class="vi">
+      <div class="vo">🔧</div>
+      <div class="vt">Penciptaan Solusi</div>
+      <div class="vd2">Pengembangan AI &amp; Platform</div>
+      <div class="vdesc">Model AI &amp; antarmuka dibangun sesuai konteks akademik AMIKOM yang spesifik</div>
+      <div class="va">→</div>
+    </div>
+    <div class="vi">
+      <div class="vo">✅</div>
+      <div class="vt">Validasi Kualitas</div>
+      <div class="vd2">Pengujian &amp; QA</div>
+      <div class="vdesc">Akurasi, keandalan, dan kegunaan AI diverifikasi oleh pengguna nyata sebelum diluncurkan</div>
+      <div class="va">→</div>
+    </div>
+    <div class="vi">
+      <div class="vo">🚀</div>
+      <div class="vt">Pengiriman Value</div>
+      <div class="vd2">Deployment &amp; Go-Live</div>
+      <div class="vdesc">AI Academic Assistant tersedia dan aktif digunakan oleh sivitas akademika AMIKOM</div>
+      <div class="va">→</div>
+    </div>
+    <div class="vi">
+      <div class="vo">📈</div>
+      <div class="vt">Realisasi Value</div>
+      <div class="vd2">Monitoring &amp; Optimasi</div>
+      <div class="vdesc">Peningkatan kualitas layanan akademik dan reputasi AMIKOM sebagai kampus inovatif</div>
+    </div>
+  </div>
+  <div class="vf a3">
+    <strong>Kesimpulan PMBOK® VII:</strong> Project Work Domain memastikan bahwa setiap aktivitas — dari scoping hingga monitoring — dijalankan secara terkoordinasi, terukur, dan berorientasi pada value. Tanpa eksekusi pekerjaan yang disiplin, bahkan rencana proyek terbaik sekalipun tidak akan mampu menghasilkan AI Academic Assistant yang benar-benar bermanfaat bagi <strong>Universitas AMIKOM Yogyakarta</strong>.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 9 — CLOSING
+══════════════════════════════════════════ -->
+<section class="slide" id="s9">
+  <div class="ey" style="text-align:center;">Ringkasan Eksekutif</div>
+  <h2 class="display a1" style="text-align:center;font-size:clamp(22px,2.8vw,38px);line-height:1.2;margin-bottom:0;">
+    Project Work Analysis<br>AI Academic Assistant AMIKOM
+  </h2>
+  <div class="ng a2">
+    <div class="nc"><div class="nn">7</div><div class="nl">Aktivitas Utama</div><div class="ns">Fase Proyek</div></div>
+    <div class="nc"><div class="nn">3</div><div class="nl">Hambatan Kritis</div><div class="ns">Perlu mitigasi aktif</div></div>
+    <div class="nc"><div class="nn">5</div><div class="nl">Rekomendasi</div><div class="ns">Strategi efektivitas</div></div>
+    <div class="nc"><div class="nn">85%</div><div class="nl">Target Akurasi AI</div><div class="ns">Go/No-Go threshold</div></div>
+  </div>
+  <p class="foot a3">
+    Dengan pendekatan <strong>PMBOK® Guide Seventh Edition</strong>, analisis Project Work Domain ini memberikan peta pelaksanaan yang jelas — mengidentifikasi aktivitas kritis, bottleneck, dan strategi yang diperlukan agar AI Academic Assistant AMIKOM dapat terwujud dan menciptakan <em>value jangka panjang</em> bagi ekosistem akademik.
+  </p>
+  <div class="ring" style="left:-80px;bottom:-80px;width:360px;height:360px;"></div>
+  <div class="ring" style="left:-30px;bottom:-30px;width:220px;height:220px;border-color:rgba(13,107,94,.15);"></div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- NAV -->
+<div id="nav">
+  <button id="pb">←</button>
+  <div class="dots" id="dn"></div>
+  <button id="nb">→</button>
+  <span id="ctr">1 / 9</span>
+</div>
+<div id="hint">← → atau panah keyboard</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dn = document.getElementById('dn');
+  const ctr = document.getElementById('ctr');
+  const total = slides.length;
+  let cur = 0;
+
+  // Build dots
+  slides.forEach(function(_, i){
+    var d = document.createElement('span');
+    if(i===0) d.classList.add('on');
+    d.addEventListener('click', function(){ goTo(i); });
+    dn.appendChild(d);
+  });
+
+  function goTo(n){
+    n = ((n % total) + total) % total;
+    slides[cur].classList.remove('active');
+    dn.children[cur].classList.remove('on');
+    cur = n;
+    slides[cur].classList.add('active');
+    dn.children[cur].classList.add('on');
+    ctr.textContent = (cur+1) + ' / ' + total;
+  }
+
+  document.getElementById('pb').addEventListener('click', function(){ goTo(cur-1); });
+  document.getElementById('nb').addEventListener('click', function(){ goTo(cur+1); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') goTo(cur+1);
+    if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   goTo(cur-1);
+  });
+
+  // Swipe support
+  var tx=0;
+  document.addEventListener('touchstart',function(e){ tx=e.touches[0].clientX; },{passive:true});
+  document.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-tx;
+    if(dx<-40) goTo(cur+1);
+    if(dx>40)  goTo(cur-1);
+  },{passive:true});
+})();
+</script>
+</body>
+</html>

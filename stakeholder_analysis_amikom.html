@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stakeholder Analysis — AI Academic Assistant AMIKOM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:wght@700;900&display=swap');
+
+  :root {
+    --navy:   #0D1B3E;
+    --blue:   #1A3A6B;
+    --gold:   #C8972A;
+    --gold-lt:#F0C050;
+    --white:  #F4F7FF;
+    --gray:   #8A9BBF;
+    --red:    #C53030;
+    --amber:  #B7681A;
+    --teal:   #0F7B6C;
+    --slate:  #1E2E50;
+    --card-bg:#162040;
+    --card-border: rgba(200,151,42,0.22);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ── Slideshow Shell ── */
+  #deck { width: 100vw; height: 100vh; position: relative; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 48px 64px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.55s ease;
+    overflow: hidden;
+  }
+  .slide.active { opacity: 1; pointer-events: all; }
+
+  /* ── Nav ── */
+  #nav {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(13,27,62,0.85);
+    backdrop-filter: blur(12px);
+    border: 0.5px solid rgba(200,151,42,0.3);
+    border-radius: 40px;
+    padding: 10px 20px;
+    z-index: 100;
+  }
+  #nav button {
+    background: none; border: none; color: var(--gold); cursor: pointer;
+    font-size: 18px; padding: 4px 8px; border-radius: 6px;
+    transition: background 0.15s;
+  }
+  #nav button:hover { background: rgba(200,151,42,0.15); }
+  #slide-counter { font-size: 12px; color: var(--gray); min-width: 50px; text-align: center; }
+  .dot-nav { display: flex; gap: 6px; align-items: center; }
+  .dot-nav span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(200,151,42,0.3); cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot-nav span.on { background: var(--gold); transform: scale(1.3); }
+
+  /* ── Key ── */
+  #key-hint {
+    position: fixed; bottom: 28px; right: 32px;
+    font-size: 11px; color: rgba(138,155,191,0.5);
+  }
+
+  /* ── Eyebrow ── */
+  .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 10px;
+    opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes barGrow {
+    from { width: 0; } to { width: var(--w); }
+  }
+  @keyframes dotPop {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    70%  { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(200,151,42,0.4); }
+    50%       { box-shadow: 0 0 0 10px rgba(200,151,42,0); }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .anim-1  { opacity: 0; animation: fadeUp 0.5s ease 0.05s forwards; }
+  .anim-2  { opacity: 0; animation: fadeUp 0.5s ease 0.18s forwards; }
+  .anim-3  { opacity: 0; animation: fadeUp 0.5s ease 0.30s forwards; }
+  .anim-4  { opacity: 0; animation: fadeUp 0.5s ease 0.42s forwards; }
+  .anim-5  { opacity: 0; animation: fadeUp 0.5s ease 0.54s forwards; }
+  .anim-6  { opacity: 0; animation: fadeUp 0.5s ease 0.66s forwards; }
+  .anim-s1 { opacity: 0; animation: scaleIn 0.5s ease 0.1s forwards; }
+  .anim-s2 { opacity: 0; animation: scaleIn 0.5s ease 0.25s forwards; }
+  .anim-s3 { opacity: 0; animation: scaleIn 0.5s ease 0.40s forwards; }
+  .anim-s4 { opacity: 0; animation: scaleIn 0.5s ease 0.55s forwards; }
+
+  /* ── Type ── */
+  .display { font-family: 'Playfair Display', serif; font-weight: 900; }
+  h1.title  { font-size: clamp(36px, 4.5vw, 58px); line-height: 1.1; }
+  h2.slide-title { font-size: clamp(22px, 2.8vw, 34px); font-weight: 700; line-height: 1.2; margin-bottom: 28px; }
+  .muted { color: var(--gray); }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+
+  /* ── SLIDE 1 — Cover ── */
+  #s1 { justify-content: center; }
+  #s1 .tagline { font-size: 13px; color: var(--gray); margin-top: 10px; }
+  #s1 .meta { margin-top: 36px; display: flex; gap: 24px; flex-wrap: wrap; }
+  #s1 .meta-pill {
+    background: rgba(200,151,42,0.12);
+    border: 0.5px solid rgba(200,151,42,0.3);
+    border-radius: 99px; padding: 6px 16px;
+    font-size: 12px; color: var(--gold-lt);
+  }
+  #s1 .gold-line {
+    width: 60px; height: 3px; background: var(--gold);
+    border-radius: 2px; margin: 20px 0;
+  }
+
+  /* ── SLIDE 2 — Domain ── */
+  .domain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1; }
+  .domain-card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .domain-card .icon { font-size: 22px; margin-bottom: 4px; }
+  .domain-card h3 { font-size: 14px; font-weight: 600; color: var(--gold-lt); }
+  .domain-card p { font-size: 12.5px; color: var(--gray); line-height: 1.6; }
+  .domain-card .tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    background: rgba(200,151,42,0.15); color: var(--gold);
+    padding: 3px 9px; border-radius: 4px; margin-top: 4px; letter-spacing: 0.05em;
+  }
+
+  /* ── SLIDE 3 — Quadrant ── */
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 14px; flex: 1; }
+  .quad {
+    border-radius: 12px; padding: 18px 20px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .quad-mc { background: rgba(197,48,48,0.12); border: 0.5px solid rgba(197,48,48,0.3); }
+  .quad-ks { background: rgba(183,104,26,0.12); border: 0.5px solid rgba(183,104,26,0.3); }
+  .quad-ki { background: rgba(26,58,107,0.35); border: 0.5px solid rgba(100,150,255,0.2); }
+  .quad-mo { background: rgba(30,46,80,0.6); border: 0.5px solid rgba(138,155,191,0.2); }
+  .quad-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .quad-mc .quad-label { color: #FC8181; }
+  .quad-ks .quad-label { color: #F6AD55; }
+  .quad-ki .quad-label { color: #90CDF4; }
+  .quad-mo .quad-label { color: var(--gray); }
+  .quad h3 { font-size: 15px; font-weight: 700; margin-top: 2px; }
+  .quad p  { font-size: 12px; color: var(--gray); line-height: 1.55; }
+  .quad .axis-info { font-size: 11px; color: rgba(138,155,191,0.7); margin-top: 4px; }
+
+  /* ── SLIDE 4 — Power-Interest Chart ── */
+  #grid-wrap {
+    flex: 1; position: relative;
+    margin: 0 0 10px;
+  }
+  #pg {
+    width: 100%; height: 100%;
+    position: relative;
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .qzone {
+    position: absolute; display: flex; align-items: flex-start;
+    justify-content: flex-start; padding: 10px 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+  }
+  .qzone-mc { top:0;left:0;width:50%;height:50%; background:rgba(197,48,48,0.07); border-right:1px dashed rgba(255,255,255,0.07); border-bottom:1px dashed rgba(255,255,255,0.07); color: rgba(252,129,129,0.6); }
+  .qzone-ks { top:0;right:0;width:50%;height:50%; background:rgba(183,104,26,0.07); border-bottom:1px dashed rgba(255,255,255,0.07); color: rgba(246,173,85,0.6); }
+  .qzone-ki { bottom:0;left:0;width:50%;height:50%; background:rgba(26,58,107,0.15); border-right:1px dashed rgba(255,255,255,0.07); color: rgba(144,205,244,0.6); }
+  .qzone-mo { bottom:0;right:0;width:50%;height:50%; background:rgba(30,46,80,0.3); color: rgba(138,155,191,0.5); }
+  /* axis labels */
+  #ax-x { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--gray); letter-spacing:0.06em; }
+  #ax-y { position:absolute; top:50%; left:8px; transform:translateY(-50%) rotate(-90deg); font-size:10px; color:var(--gray); letter-spacing:0.06em; white-space:nowrap; }
+
+  .sh-dot {
+    position: absolute;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .sh-dot:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+    box-shadow: 0 0 0 8px rgba(255,255,255,0.07);
+    z-index: 20;
+  }
+  .sh-dot.popped { animation: dotPop 0.45s ease forwards; }
+
+  #tooltip {
+    position: fixed; display: none;
+    background: var(--navy);
+    border: 0.5px solid var(--gold);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    pointer-events: none; z-index: 200;
+    max-width: 220px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  #tooltip .tt-name { font-weight: 600; color: var(--gold-lt); margin-bottom: 4px; }
+  #tooltip .tt-role { color: var(--gray); font-size: 11px; margin-bottom: 6px; }
+  #tooltip .tt-strat { color: var(--white); font-size: 11px; line-height: 1.5; }
+
+  /* ── SLIDE 5 — Stakeholder Table ── */
+  .sh-table { width: 100%; border-collapse: collapse; flex: 1; }
+  .sh-table th {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--gray);
+    padding: 8px 10px; text-align: left;
+    border-bottom: 0.5px solid rgba(200,151,42,0.2);
+  }
+  .sh-table td {
+    padding: 9px 10px; font-size: 12px; vertical-align: middle;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  }
+  .sh-table tr:last-child td { border-bottom: none; }
+  .sh-table tr:hover td { background: rgba(200,151,42,0.04); }
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+  }
+  .b-mc { background: rgba(197,48,48,0.2); color: #FC8181; }
+  .b-ks { background: rgba(183,104,26,0.2); color: #F6AD55; }
+  .b-ki { background: rgba(26,90,163,0.25); color: #90CDF4; }
+  .b-mo { background: rgba(138,155,191,0.15); color: var(--gray); }
+  .mini-bar-wrap { height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; width: 60px; overflow:hidden; display:inline-block; vertical-align: middle; }
+  .mini-bar { height: 100%; border-radius: 3px; width: var(--w); animation: barGrow 0.8s ease 0.5s both; }
+  .mb-high { background: #FC8181; }
+  .mb-med  { background: #F6AD55; }
+  .mb-low  { background: #90CDF4; }
+
+  /* ── SLIDE 6 — Insights ── */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .insight-col { display: flex; flex-direction: column; gap: 12px; }
+  .icard {
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .icard.critical { border-color: rgba(197,48,48,0.4); }
+  .icard.risk     { border-color: rgba(183,104,26,0.4); }
+  .icard.rec      { border-color: rgba(26,90,163,0.4); }
+  .icard-title { font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+  .icard.critical .icard-title { color: #FC8181; }
+  .icard.risk     .icard-title { color: #F6AD55; }
+  .icard.rec      .icard-title { color: #90CDF4; }
+  .icard ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .icard ul li { font-size: 12px; color: var(--gray); padding-left: 16px; position: relative; line-height: 1.5; }
+  .icard ul li::before { content: '›'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+  .icard ul li strong { color: var(--white); }
+  .rec-item { display: flex; gap: 10px; align-items: flex-start; }
+  .rec-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(200,151,42,0.15); border: 0.5px solid var(--gold); display:flex;align-items:center;justify-content:center; font-size: 11px; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+  .rec-body { font-size: 12px; color: var(--gray); line-height: 1.55; }
+  .rec-body strong { color: var(--white); display: block; margin-bottom: 3px; font-size: 12.5px; }
+
+  /* ── SLIDE 7 — Value Delivery ── */
+  .vds-chain {
+    display: flex; align-items: stretch;
+    gap: 0; flex: 1; margin-top: 8px;
+  }
+  .vds-item {
+    flex: 1;
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
+    border-radius: 0;
+    padding: 20px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative;
+    text-align: center;
+  }
+  .vds-item:first-child { border-radius: 12px 0 0 12px; }
+  .vds-item:last-child  { border-radius: 0 12px 12px 0; }
+  .vds-item + .vds-item { border-left: none; }
+  .vds-arrow {
+    position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--navy); border: 0.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 13px; font-weight: 700;
+    z-index: 5;
+  }
+  .vds-icon { font-size: 26px; }
+  .vds-title { font-size: 12px; font-weight: 700; color: var(--gold-lt); }
+  .vds-sh { font-size: 11px; color: var(--gray); line-height: 1.5; }
+  .vds-desc { font-size: 11px; color: rgba(138,155,191,0.8); line-height: 1.5; margin-top: 4px; }
+  .vds-bottom {
+    margin-top: 18px; padding: 14px 20px;
+    background: rgba(200,151,42,0.08);
+    border: 0.5px solid rgba(200,151,42,0.25);
+    border-radius: 10px;
+    font-size: 13px; color: var(--gray); line-height: 1.6;
+  }
+  .vds-bottom strong { color: var(--white); }
+
+  /* ── SLIDE 8 — Closing ── */
+  #s8 { justify-content: center; align-items: center; text-align: center; }
+  #s8 .closing-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    margin: 32px 0;
+  }
+  #s8 .c-card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+  #s8 .c-num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--gold); line-height: 1; }
+  #s8 .c-lbl { font-size: 11px; color: var(--gray); margin-top: 6px; line-height: 1.4; }
+  #s8 .c-sub { font-size: 12px; color: var(--white); margin-top: 3px; font-weight: 500; }
+
+  /* ── Scrollable content for dense slides ── */
+  .scroll-area { overflow-y: auto; flex: 1; padding-right: 4px; }
+  .scroll-area::-webkit-scrollbar { width: 3px; }
+  .scroll-area::-webkit-scrollbar-track { background: transparent; }
+  .scroll-area::-webkit-scrollbar-thumb { background: rgba(200,151,42,0.3); border-radius: 2px; }
+
+  /* reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .slide { transition: none; }
+    [class^="anim-"] { animation: none !important; opacity: 1 !important; }
+    .sh-dot.popped { animation: none !important; opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 1 — Cover
+  ══════════════════════════════════════════════════ -->
+  <section class="slide active" id="s1">
+    <div class="eyebrow">Manajemen Proyek · PMBOK® Guide Seventh Edition</div>
+    <div class="anim-1">
+      <h1 class="title display">Stakeholder<br>Analysis</h1>
+    </div>
+    <div class="gold-line anim-2"></div>
+    <p class="anim-2" style="font-size:17px;color:var(--gray);max-width:600px;line-height:1.6">
+      AI Academic Assistant<br>
+      <span style="color:var(--white);font-weight:600">Universitas AMIKOM Yogyakarta</span>
+    </p>
+    <div class="meta anim-3">
+      <div class="meta-pill">Power-Interest Grid</div>
+      <div class="meta-pill">14 Stakeholder Teridentifikasi</div>
+      <div class="meta-pill">4 Kuadran Strategi</div>
+      <div class="meta-pill">Value Delivery System</div>
+    </div>
+    <div style="position:absolute;bottom:80px;left:64px;font-size:12px;color:rgba(138,155,191,0.4)">
+      Gunakan tombol ← → atau tekan panah keyboard untuk navigasi
+    </div>
+    <!-- decorative circles -->
+    <div style="position:absolute;right:-80px;top:-80px;width:400px;height:400px;border-radius:50%;border:0.5px solid rgba(200,151,42,0.08);pointer-events:none"></div>
+    <div style="position:absolute;right:-40px;top:-40px;width:280px;height:280px;border-radius:50%;border:0.5px solid rgba(200,151,42,0.12);pointer-events:none"></div>
+    <div style="position:absolute;right:40px;top:40px;width:160px;height:160px;border-radius:50%;border:0.5px solid rgba(200,151,42,0.18);pointer-events:none"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 2 — Stakeholder Domain
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s2">
+    <div class="eyebrow">01 — Stakeholder Domain</div>
+    <h2 class="slide-title anim-1">Apa itu Stakeholder Domain?</h2>
+    <div class="domain-grid">
+      <div class="domain-card anim-s1">
+        <div class="icon">🎯</div>
+        <h3>Definisi</h3>
+        <p>Domain kinerja dalam PMBOK® VII yang berfokus pada identifikasi, analisis, dan pengelolaan semua pihak yang terdampak atau berpengaruh terhadap proyek — baik positif maupun negatif.</p>
+        <span class="tag">PMBOK® VII — Performance Domain</span>
+      </div>
+      <div class="domain-card anim-s2">
+        <div class="icon">🏛️</div>
+        <h3>Prinsip Utama</h3>
+        <p>Proyek tidak hanya menghasilkan <em style="color:var(--white)">output teknis</em>, tetapi harus menciptakan <em style="color:var(--white)">value nyata</em> bagi seluruh ekosistem stakeholder yang terlibat dalam proyek AMIKOM.</p>
+        <span class="tag">Value-Driven Delivery</span>
+      </div>
+      <div class="domain-card anim-s3">
+        <div class="icon">🔍</div>
+        <h3>Metode yang Digunakan</h3>
+        <p><strong style="color:var(--white)">Power-Interest Grid</strong> — memetakan setiap stakeholder berdasarkan dua dimensi: seberapa besar kekuasaan dan seberapa tinggi kepentingannya terhadap proyek ini.</p>
+        <span class="tag">Analytical Tool</span>
+      </div>
+      <div class="domain-card anim-s4">
+        <div class="icon">📊</div>
+        <h3>Outcome yang Diharapkan</h3>
+        <p>Strategi engagement yang tepat sasaran untuk setiap stakeholder, sehingga risiko resistensi diminimalkan dan dukungan terhadap AI Academic Assistant AMIKOM dimaksimalkan.</p>
+        <span class="tag">Engagement Strategy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 3 — Kuadran
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s3">
+    <div class="eyebrow">02 — Power-Interest Grid</div>
+    <h2 class="slide-title anim-1">Empat Kuadran Strategi</h2>
+    <div class="quad-grid">
+      <div class="quad quad-mc anim-s1">
+        <div class="quad-label">Manage Closely</div>
+        <h3>Power Tinggi · Interest Tinggi</h3>
+        <p>Stakeholder paling kritis. Libatkan secara aktif di setiap tahap proyek. Komunikasi intensif, keputusan bersama, dan keterlibatan dalam milestone utama.</p>
+        <div class="axis-info">↑ Power &nbsp;·&nbsp; → Interest</div>
+      </div>
+      <div class="quad quad-ks anim-s2">
+        <div class="quad-label">Keep Satisfied</div>
+        <h3>Power Tinggi · Interest Rendah</h3>
+        <p>Punya otoritas besar namun tidak selalu aktif terlibat. Penuhi kebutuhan mereka secara proaktif untuk menghindari resistensi tak terduga.</p>
+        <div class="axis-info">↑ Power &nbsp;·&nbsp; ← Interest</div>
+      </div>
+      <div class="quad quad-ki anim-s3">
+        <div class="quad-label">Keep Informed</div>
+        <h3>Power Rendah · Interest Tinggi</h3>
+        <p>Sangat peduli dengan proyek namun memiliki pengaruh terbatas. Update rutin akan menjadikan mereka advokat dan early adopter yang berharga.</p>
+        <div class="axis-info">↓ Power &nbsp;·&nbsp; → Interest</div>
+      </div>
+      <div class="quad quad-mo anim-s4">
+        <div class="quad-label">Monitor</div>
+        <h3>Power Rendah · Interest Rendah</h3>
+        <p>Terdampak secara tidak langsung. Cukup dipantau minimal dengan informasi berkala agar tidak menjadi sumber hambatan di kemudian hari.</p>
+        <div class="axis-info">↓ Power &nbsp;·&nbsp; ← Interest</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 4 — Power-Interest Chart Visual
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s4">
+    <div class="eyebrow">03 — Peta Stakeholder</div>
+    <h2 class="slide-title anim-1" style="margin-bottom:12px">Power-Interest Grid — Visualisasi</h2>
+    <div id="grid-wrap" class="anim-s1">
+      <div id="pg">
+        <!-- Quadrant zones -->
+        <div class="qzone qzone-mc">Manage Closely</div>
+        <div class="qzone qzone-ks">Keep Satisfied</div>
+        <div class="qzone qzone-ki" style="align-items:flex-end">Keep Informed</div>
+        <div class="qzone qzone-mo" style="align-items:flex-end">Monitor</div>
+        <!-- Axis labels -->
+        <div id="ax-x">Interest (Kepentingan) →</div>
+        <div id="ax-y">← Power (Kekuasaan)</div>
+        <!-- Dots: x=interest%, y=power% (y inverted: high power = top) -->
+        <!-- Manage Closely -->
+        <div class="sh-dot" style="left:18%;top:12%;background:#C53030" data-name="Rektor AMIKOM" data-role="Sponsor eksekutif utama" data-strat="Laporan kemajuan rutin, review milestone, keputusan strategis bersama">RK</div>
+        <div class="sh-dot" style="left:25%;top:20%;background:#C53030" data-name="Direktorat IT/TI" data-role="Pengelola infrastruktur teknis" data-strat="Kolaborasi harian, sprint planning, technical approval gate">DI</div>
+        <div class="sh-dot" style="left:20%;top:32%;background:#A02020" data-name="Dekan / Kaprodi" data-role="Pemimpin akademik departemen" data-strat="Rapat koordinasi bulanan, validasi konten & user story">DK</div>
+        <div class="sh-dot" style="left:35%;top:10%;background:#C53030" data-name="Tim Pengembang AI" data-role="Developer, data scientist, UX designer" data-strat="Daily standup, sprint review, akses penuh dokumentasi">TD</div>
+        <div class="sh-dot" style="left:12%;top:42%;background:#8B1C1C" data-name="Dosen / Pengajar" data-role="Pengguna & pemberi konten akademik" data-strat="Workshop, focus group, beta testing, feedback loop aktif">DS</div>
+        <!-- Keep Satisfied -->
+        <div class="sh-dot" style="left:60%;top:8%;background:#B7681A" data-name="Yayasan AMIKOM" data-role="Pemilik & otoritas tertinggi" data-strat="Laporan eksekutif triwulan, presentasi ROI, dashboard eksekutif">YY</div>
+        <div class="sh-dot" style="left:72%;top:18%;background:#9C5A10" data-name="Kemdikti / BAN-PT" data-role="Regulator & pemberi akreditasi" data-strat="Pastikan kepatuhan regulasi, dokumentasi tata kelola AI">DT</div>
+        <div class="sh-dot" style="left:82%;top:32%;background:#7A4808" data-name="Vendor AI / Mitra" data-role="Penyedia platform & model AI" data-strat="SLA management, negosiasi kontrak, technical liaison">VA</div>
+        <!-- Keep Informed -->
+        <div class="sh-dot" style="left:18%;top:68%;background:#185FA5" data-name="Mahasiswa" data-role="End-user utama sistem" data-strat="Pilot test, survei kepuasan, newsletter, kanal feedback">MH</div>
+        <div class="sh-dot" style="left:30%;top:78%;background:#0E4D8C" data-name="Tenaga Kependidikan" data-role="Operasional & admin sistem" data-strat="Pelatihan sistem, SOP update, helpdesk support">TK</div>
+        <div class="sh-dot" style="left:38%;top:60%;background:#1A6DB5" data-name="Komite Mutu / SPMI" data-role="Penjamin mutu pendidikan" data-strat="Laporan kualitas output AI, audit berkala, standar mutu">KM</div>
+        <!-- Monitor -->
+        <div class="sh-dot" style="left:62%;top:70%;background:#5F5E5A" data-name="Alumni AMIKOM" data-role="Pemangku kepentingan eksternal" data-strat="Newsletter kuartalan, update media sosial institusi">AL</div>
+        <div class="sh-dot" style="left:74%;top:80%;background:#444441" data-name="Media / Publik" data-role="Pembentuk persepsi eksternal" data-strat="Press release di milestones besar, social media engagement">MD</div>
+        <div class="sh-dot" style="left:86%;top:64%;background:#2C2C2A" data-name="Masyarakat / Industri" data-role="Penerima manfaat tidak langsung" data-strat="Publikasi penelitian, konferensi akademik, laporan dampak">MU</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--gray);text-align:center;margin-top:6px">
+      Arahkan kursor ke titik stakeholder untuk melihat detail strategi engagement
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 5 — Stakeholder Matrix Table
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s5">
+    <div class="eyebrow">04 — Stakeholder Matrix</div>
+    <h2 class="slide-title anim-1">Daftar Stakeholder & Klasifikasi</h2>
+    <div class="scroll-area anim-2">
+      <table class="sh-table">
+        <thead>
+          <tr>
+            <th>Stakeholder</th>
+            <th>Peran</th>
+            <th>Power</th>
+            <th>Interest</th>
+            <th>Klasifikasi</th>
+            <th>Strategi Engagement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Rektor AMIKOM</strong></td>
+            <td style="color:var(--gray);font-size:11px">Sponsor eksekutif</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:95%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">95</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:90%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">90</span></td>
+            <td><span class="badge b-mc">Manage Closely</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Laporan kemajuan rutin, review milestone</td>
+          </tr>
+          <tr>
+            <td><strong>Direktorat IT</strong></td>
+            <td style="color:var(--gray);font-size:11px">Infrastruktur teknis</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:88%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">88</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:92%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">92</span></td>
+            <td><span class="badge b-mc">Manage Closely</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Kolaborasi harian, sprint planning</td>
+          </tr>
+          <tr>
+            <td><strong>Dekan / Kaprodi</strong></td>
+            <td style="color:var(--gray);font-size:11px">Pemimpin akademik</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:80%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">80</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:85%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">85</span></td>
+            <td><span class="badge b-mc">Manage Closely</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Rapat bulanan, validasi konten akademik</td>
+          </tr>
+          <tr>
+            <td><strong>Tim Pengembang AI</strong></td>
+            <td style="color:var(--gray);font-size:11px">Dev, data scientist</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:75%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">75</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:98%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">98</span></td>
+            <td><span class="badge b-mc">Manage Closely</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Daily standup, retrospektif, akses docs</td>
+          </tr>
+          <tr>
+            <td><strong>Dosen / Pengajar</strong></td>
+            <td style="color:var(--gray);font-size:11px">Pengguna & konten</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:60%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">60</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:88%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">88</span></td>
+            <td><span class="badge b-mc">Manage Closely</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Workshop, FGD, beta testing</td>
+          </tr>
+          <tr>
+            <td><strong>Yayasan AMIKOM</strong></td>
+            <td style="color:var(--gray);font-size:11px">Otoritas tertinggi</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:98%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">98</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:45%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">45</span></td>
+            <td><span class="badge b-ks">Keep Satisfied</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Laporan eksekutif triwulan, ROI dashboard</td>
+          </tr>
+          <tr>
+            <td><strong>Kemdikti / BAN-PT</strong></td>
+            <td style="color:var(--gray);font-size:11px">Regulator pendidikan</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:85%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">85</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:40%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">40</span></td>
+            <td><span class="badge b-ks">Keep Satisfied</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Kepatuhan regulasi, dokumentasi AI Gov.</td>
+          </tr>
+          <tr>
+            <td><strong>Vendor AI / Mitra</strong></td>
+            <td style="color:var(--gray);font-size:11px">Penyedia platform AI</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:70%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">70</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:50%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">50</span></td>
+            <td><span class="badge b-ks">Keep Satisfied</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">SLA management, negosiasi kontrak</td>
+          </tr>
+          <tr>
+            <td><strong>Mahasiswa</strong></td>
+            <td style="color:var(--gray);font-size:11px">End-user utama</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:30%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">30</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-high" style="--w:95%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">95</span></td>
+            <td><span class="badge b-ki">Keep Informed</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Pilot test, survei, newsletter, feedback</td>
+          </tr>
+          <tr>
+            <td><strong>Tenaga Kependidikan</strong></td>
+            <td style="color:var(--gray);font-size:11px">Operasional admin</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:25%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">25</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:75%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">75</span></td>
+            <td><span class="badge b-ki">Keep Informed</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Pelatihan, SOP update, helpdesk</td>
+          </tr>
+          <tr>
+            <td><strong>Komite Mutu / SPMI</strong></td>
+            <td style="color:var(--gray);font-size:11px">Penjamin mutu</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:35%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">35</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-med" style="--w:80%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">80</span></td>
+            <td><span class="badge b-ki">Keep Informed</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Laporan mutu AI, audit berkala</td>
+          </tr>
+          <tr>
+            <td><strong>Alumni AMIKOM</strong></td>
+            <td style="color:var(--gray);font-size:11px">Eksternal</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:20%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">20</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:35%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">35</span></td>
+            <td><span class="badge b-mo">Monitor</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Newsletter kuartalan, sosmed</td>
+          </tr>
+          <tr>
+            <td><strong>Media / Publik</strong></td>
+            <td style="color:var(--gray);font-size:11px">Persepsi eksternal</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:15%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">15</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:30%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">30</span></td>
+            <td><span class="badge b-mo">Monitor</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Press release milestone besar</td>
+          </tr>
+          <tr>
+            <td><strong>Masyarakat / Industri</strong></td>
+            <td style="color:var(--gray);font-size:11px">Manfaat tidak langsung</td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:10%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">10</span></td>
+            <td><div class="mini-bar-wrap"><div class="mini-bar mb-low" style="--w:25%"></div></div><span style="font-size:10px;color:var(--gray);margin-left:4px">25</span></td>
+            <td><span class="badge b-mo">Monitor</span></td>
+            <td style="font-size:11.5px;color:var(--gray)">Publikasi penelitian, konferensi</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 6 — Insights
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s6">
+    <div class="eyebrow">05 — Insights & Rekomendasi</div>
+    <h2 class="slide-title anim-1">Analisis Kritis & Strategi</h2>
+    <div class="insight-grid">
+      <div class="insight-col">
+        <div class="icard critical anim-s1">
+          <div class="icard-title">⚠ Stakeholder Paling Kritis</div>
+          <ul>
+            <li><strong>Rektor AMIKOM</strong> — Sponsor utama. Kehilangan dukungan = project shutdown. Alignment visi strategis sejak fase inisiasi.</li>
+            <li><strong>Direktorat IT</strong> — Pemegang kendali infrastruktur. Bottleneck teknis terbesar jika tidak di-manage intensif.</li>
+            <li><strong>Tim Pengembang AI</strong> — Executor kunci. Engagement buruk → turnover → knowledge loss yang fatal bagi proyek.</li>
+          </ul>
+        </div>
+        <div class="icard risk anim-s2">
+          <div class="icard-title">🛑 Potensi Penghambat Proyek</div>
+          <ul>
+            <li><strong>Dosen / Pengajar</strong> — Resistensi karena khawatir peran tergantikan AI. Butuh change management intensif.</li>
+            <li><strong>Kemdikti / BAN-PT</strong> — Regulasi AI pendidikan masih berkembang. Ketidakpatuhan bisa blokir operasional.</li>
+            <li><strong>Vendor AI</strong> — Ketergantungan teknologi eksternal. SLA breach atau perubahan harga bisa ganggu jadwal proyek.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="insight-col">
+        <div class="icard rec anim-s3">
+          <div class="icard-title">💡 Rekomendasi Strategi</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+            <div class="rec-item">
+              <div class="rec-num">1</div>
+              <div class="rec-body"><strong>Communication Management Plan Berlapis</strong>Jalur eksekutif (laporan bulanan), operasional (sprint report), dan pengguna (newsletter & demo) harus berjalan paralel.</div>
+            </div>
+            <div class="rec-item">
+              <div class="rec-num">2</div>
+              <div class="rec-body"><strong>Dosen sebagai Co-Creator</strong>Libatkan sejak requirement gathering. Dosen early adopter → internal champion → adopsi lebih luas.</div>
+            </div>
+            <div class="rec-item">
+              <div class="rec-num">3</div>
+              <div class="rec-body"><strong>Proaktif Mapping Regulasi</strong>Bentuk tim legal & compliance, buat AI Governance Framework sejak awal sebagai deliverable proyek.</div>
+            </div>
+            <div class="rec-item">
+              <div class="rec-num">4</div>
+              <div class="rec-body"><strong>Re-assessment Periodik</strong>Stakeholder bisa pindah kuadran. Lakukan review Power-Interest Grid setiap 3 bulan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 7 — Value Delivery System
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s7">
+    <div class="eyebrow">06 — Value Delivery System</div>
+    <h2 class="slide-title anim-1">Kontribusi terhadap Value Delivery AMIKOM</h2>
+    <div class="vds-chain anim-2">
+      <div class="vds-item">
+        <div class="vds-icon">🎯</div>
+        <div class="vds-title">Identifikasi Kebutuhan</div>
+        <div class="vds-sh">Dosen & Mahasiswa</div>
+        <div class="vds-desc">Sumber requirements riil dari pengguna langsung sistem AI</div>
+        <div class="vds-arrow">→</div>
+      </div>
+      <div class="vds-item">
+        <div class="vds-icon">🔧</div>
+        <div class="vds-title">Pengembangan</div>
+        <div class="vds-sh">Tim Dev & Direktorat IT</div>
+        <div class="vds-desc">Membangun solusi teknis AI yang sesuai kebutuhan akademik</div>
+        <div class="vds-arrow">→</div>
+      </div>
+      <div class="vds-item">
+        <div class="vds-icon">✅</div>
+        <div class="vds-title">Validasi Mutu</div>
+        <div class="vds-sh">Komite SPMI & Dekan</div>
+        <div class="vds-desc">Memastikan standar akademik & kualitas output AI terpenuhi</div>
+        <div class="vds-arrow">→</div>
+      </div>
+      <div class="vds-item">
+        <div class="vds-icon">🚀</div>
+        <div class="vds-title">Adopsi & Operasi</div>
+        <div class="vds-sh">Tendik & Mahasiswa</div>
+        <div class="vds-desc">Mengoperasikan sistem dalam ekosistem kampus sehari-hari</div>
+        <div class="vds-arrow">→</div>
+      </div>
+      <div class="vds-item">
+        <div class="vds-icon">📈</div>
+        <div class="vds-title">Realisasi Value</div>
+        <div class="vds-sh">Rektor & Yayasan</div>
+        <div class="vds-desc">Mengukur ROI, reputasi AMIKOM meningkat di dunia akademik</div>
+      </div>
+    </div>
+    <div class="vds-bottom anim-3">
+      <strong>Kesimpulan PMBOK® VII:</strong> Pengelolaan Stakeholder Domain yang baik memastikan setiap tahap Value Delivery System mendapat input dan buy-in dari stakeholder yang tepat — dari identifikasi value hingga realisasi manfaat nyata. Tanpa pemetaan yang cermat, proyek berisiko menghasilkan sistem yang secara teknis berjalan <em>namun tidak digunakan</em>, sehingga value tidak pernah terealisasi bagi Universitas AMIKOM Yogyakarta.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SLIDE 8 — Closing
+  ══════════════════════════════════════════════════ -->
+  <section class="slide" id="s8">
+    <div class="eyebrow" style="text-align:center">Ringkasan Eksekutif</div>
+    <h2 class="slide-title display anim-1" style="text-align:center;font-size:clamp(24px,3vw,40px)">
+      Stakeholder Analysis<br>AI Academic Assistant AMIKOM
+    </h2>
+    <div class="closing-grid anim-2">
+      <div class="c-card">
+        <div class="c-num">14</div>
+        <div class="c-lbl">Stakeholder</div>
+        <div class="c-sub">Teridentifikasi</div>
+      </div>
+      <div class="c-card">
+        <div class="c-num">4</div>
+        <div class="c-lbl">Kuadran</div>
+        <div class="c-sub">Power-Interest Grid</div>
+      </div>
+      <div class="c-card">
+        <div class="c-num">5</div>
+        <div class="c-lbl">Manage Closely</div>
+        <div class="c-sub">Stakeholder Kritis</div>
+      </div>
+      <div class="c-card">
+        <div class="c-num">3</div>
+        <div class="c-lbl">Potensi Hambatan</div>
+        <div class="c-sub">Perlu mitigasi aktif</div>
+      </div>
+    </div>
+    <div class="anim-3" style="max-width:640px;text-align:center">
+      <p style="font-size:14px;color:var(--gray);line-height:1.7">
+        Dengan pendekatan <strong style="color:var(--white)">PMBOK® Guide Seventh Edition</strong>, analisis ini memastikan setiap stakeholder dikelola secara tepat sasaran — menciptakan fondasi yang kuat untuk keberhasilan proyek AI Academic Assistant dan penciptaan <strong style="color:var(--gold-lt)">value jangka panjang</strong> bagi Universitas AMIKOM Yogyakarta.
+      </p>
+    </div>
+    <!-- decorative -->
+    <div style="position:absolute;left:-80px;bottom:-80px;width:350px;height:350px;border-radius:50%;border:0.5px solid rgba(200,151,42,0.08);pointer-events:none"></div>
+    <div style="position:absolute;left:-30px;bottom:-30px;width:220px;height:220px;border-radius:50%;border:0.5px solid rgba(200,151,42,0.14);pointer-events:none"></div>
+  </section>
+
+</div><!-- /deck -->
+
+<!-- Tooltip -->
+<div id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-role" id="tt-role"></div>
+  <div class="tt-strat" id="tt-strat"></div>
+</div>
+
+<!-- Nav -->
+<div id="nav">
+  <button id="prev-btn" aria-label="Sebelumnya">←</button>
+  <div class="dot-nav" id="dot-nav"></div>
+  <button id="next-btn" aria-label="Berikutnya">→</button>
+  <span id="slide-counter">1 / 8</span>
+</div>
+
+<div id="key-hint">← → atau panah keyboard</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotNav = document.getElementById('dot-nav');
+const counter = document.getElementById('slide-counter');
+const tooltip = document.getElementById('tooltip');
+let current = 0;
+const total = slides.length;
+
+// Build dot nav
+slides.forEach((_, i) => {
+  const d = document.createElement('span');
+  if (i === 0) d.classList.add('on');
+  d.addEventListener('click', () => goTo(i));
+  dotNav.appendChild(d);
+});
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  dotNav.children[current].classList.remove('on');
+  current = (n + total) % total;
+  slides[current].classList.add('active');
+  dotNav.children[current].classList.add('on');
+  counter.textContent = `${current + 1} / ${total}`;
+  // Trigger dot pops on slide 4
+  if (current === 3) triggerDotPops();
+}
+
+document.getElementById('prev-btn').addEventListener('click', () => goTo(current - 1));
+document.getElementById('next-btn').addEventListener('click', () => goTo(current + 1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
+});
+
+// Power-Interest dot pop animations
+function triggerDotPops() {
+  const dots = document.querySelectorAll('.sh-dot');
+  dots.forEach((dot, i) => {
+    dot.style.opacity = '0';
+    dot.classList.remove('popped');
+    setTimeout(() => {
+      dot.classList.add('popped');
+    }, 150 + i * 80);
+  });
+}
+
+// Tooltip
+document.querySelectorAll('.sh-dot').forEach(dot => {
+  dot.addEventListener('mouseenter', e => {
+    document.getElementById('tt-name').textContent = dot.dataset.name;
+    document.getElementById('tt-role').textContent = dot.dataset.role;
+    document.getElementById('tt-strat').textContent = dot.dataset.strat;
+    tooltip.style.display = 'block';
+    posTooltip(e);
+  });
+  dot.addEventListener('mousemove', posTooltip);
+  dot.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+});
+
+function posTooltip(e) {
+  let x = e.clientX + 16, y = e.clientY - 20;
+  if (x + 230 > window.innerWidth) x = e.clientX - 240;
+  if (y + 120 > window.innerHeight) y = e.clientY - 130;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+
+// Auto-pop on load if slide 4 is somehow first (shouldn't be)
+if (current === 3) triggerDotPops();
+</script>
+</body>
+</html>

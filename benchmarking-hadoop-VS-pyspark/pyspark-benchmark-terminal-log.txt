@@ -1,0 +1,284 @@
+Microsoft Windows [Version 10.0.26100.3775]
+(c) Microsoft Corporation. All rights reserved.
+
+D:\Coding\#bigdata\pyspark-test>code .
+
+D:\Coding\#bigdata\pyspark-test>spark-submit benchmark-spark.py
+Spark Environment Loaded Successfully
+JAVA_HOME   = C:\Program Files\Java\jdk1.8.0_471
+HADOOP_HOME = C:\Hadoop\hadoop-3.3.6
+SPARK_HOME  = C:\Hadoop\spark-3.5.1-bin-hadoop3
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings> Apps > Advanced app settings > App execution aliases.
+26/06/26 14:28:57 INFO ShutdownHookManager: Shutdown hook called
+26/06/26 14:28:57 INFO ShutdownHookManager: Deleting directory C:\Users\Administrator\AppData\Local\Temp\spark-c1ca459f-94f7-43cd-8c07-07102d975a69
+
+D:\Coding\#bigdata\pyspark-test>spark-submit --master local[8] --conf spark.pyspark.python=D:\Coding\#bigdata\venv\Scripts\python.exe pyspark-test/benchmark-spark.py
+Spark Environment Loaded Successfully
+JAVA_HOME   = C:\Program Files\Java\jdk1.8.0_471
+HADOOP_HOME = C:\Hadoop\hadoop-3.3.6
+SPARK_HOME  = C:\Hadoop\spark-3.5.1-bin-hadoop3
+C:\Program Files\Python311\python.exe: can't open file 'D:\\Coding\\#bigdata\\pyspark-test\\pyspark-test\\benchmark-spark.py': [Errno 2] No such file or directory
+26/06/26 14:30:28 INFO ShutdownHookManager: Shutdown hook called
+26/06/26 14:30:28 INFO ShutdownHookManager: Deleting directory C:\Users\Administrator\AppData\Local\Temp\spark-ed37e7cf-1d0f-40c9-9be9-d49c802382dd
+
+D:\Coding\#bigdata\pyspark-test>spark-submit --master local[8] --conf spark.pyspark.python=D:\Coding\#bigdata\venv\Scripts\python.exe pyspark-test/benchmark-spark.py
+Spark Environment Loaded Successfully
+JAVA_HOME   = C:\Program Files\Java\jdk1.8.0_471
+HADOOP_HOME = C:\Hadoop\hadoop-3.3.6
+SPARK_HOME  = C:\Hadoop\spark-3.5.1-bin-hadoop3
+C:\Program Files\Python311\python.exe: can't open file 'D:\\Coding\\#bigdata\\pyspark-test\\pyspark-test\\benchmark-spark.py': [Errno 2] No such file or directory
+26/06/26 14:33:58 INFO ShutdownHookManager: Shutdown hook called
+26/06/26 14:33:58 INFO ShutdownHookManager: Deleting directory C:\Users\Administrator\AppData\Local\Temp\spark-c4e7895e-ef1b-4da9-94cb-d42819b710fc
+
+D:\Coding\#bigdata\pyspark-test>spark-submit --master local[8] --conf spark.pyspark.python=D:\Coding\#bigdata\venv\Scripts\python.exe benchmark-spark.py
+Spark Environment Loaded Successfully
+JAVA_HOME   = C:\Program Files\Java\jdk1.8.0_471
+HADOOP_HOME = C:\Hadoop\hadoop-3.3.6
+SPARK_HOME  = C:\Hadoop\spark-3.5.1-bin-hadoop3
+26/06/26 14:34:15 INFO SparkContext: Running Spark version 3.5.1
+26/06/26 14:34:15 INFO SparkContext: OS info Windows 11, 10.0, amd64
+26/06/26 14:34:15 INFO SparkContext: Java version 1.8.0_471
+26/06/26 14:34:15 INFO ResourceUtils: ==============================================================
+26/06/26 14:34:15 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/06/26 14:34:15 INFO ResourceUtils: ==============================================================
+26/06/26 14:34:15 INFO SparkContext: Submitted application: PySpark-WordCount-Benchmark
+26/06/26 14:34:15 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/06/26 14:34:15 INFO ResourceProfile: Limiting resource is cpu
+26/06/26 14:34:15 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/06/26 14:34:15 INFO SecurityManager: Changing view acls to: Administrator
+26/06/26 14:34:15 INFO SecurityManager: Changing modify acls to: Administrator
+26/06/26 14:34:15 INFO SecurityManager: Changing view acls groups to:
+26/06/26 14:34:15 INFO SecurityManager: Changing modify acls groups to:
+26/06/26 14:34:15 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: Administrator; groups with view permissions: EMPTY; users with modify permissions: Administrator; groups with modify permissions: EMPTY
+26/06/26 14:34:16 INFO Utils: Successfully started service 'sparkDriver' on port 63076.
+26/06/26 14:34:16 INFO SparkEnv: Registering MapOutputTracker
+26/06/26 14:34:16 INFO SparkEnv: Registering BlockManagerMaster
+26/06/26 14:34:16 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/06/26 14:34:16 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/06/26 14:34:16 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/06/26 14:34:16 INFO DiskBlockManager: Created local directory at C:\Users\Administrator\AppData\Local\Temp\blockmgr-d08a0bf7-b8df-4dab-a6e8-8b1a7194ef0c
+26/06/26 14:34:16 INFO MemoryStore: MemoryStore started with capacity 2004.6 MiB
+26/06/26 14:34:16 INFO SparkEnv: Registering OutputCommitCoordinator
+26/06/26 14:34:16 INFO JettyUtils: Start Jetty 127.0.0.1:4040 for SparkUI
+26/06/26 14:34:16 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/06/26 14:34:17 INFO Executor: Starting executor ID driver on host kubernetes.docker.internal
+26/06/26 14:34:17 INFO Executor: OS info Windows 11, 10.0, amd64
+26/06/26 14:34:17 INFO Executor: Java version 1.8.0_471
+26/06/26 14:34:17 INFO Executor: Starting executor with user classpath (userClassPathFirst = false): ''
+26/06/26 14:34:17 INFO Executor: Created or updated repl class loader org.apache.spark.util.MutableURLClassLoader@4cfdaa1 for default.
+26/06/26 14:34:17 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 63128.
+26/06/26 14:34:17 INFO NettyBlockTransferService: Server created on kubernetes.docker.internal:63128
+26/06/26 14:34:17 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/06/26 14:34:17 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, kubernetes.docker.internal, 63128, None)
+26/06/26 14:34:17 INFO BlockManagerMasterEndpoint: Registering block manager kubernetes.docker.internal:63128 with 2004.6 MiB RAM, BlockManagerId(driver, kubernetes.docker.internal, 63128, None)
+26/06/26 14:34:17 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, kubernetes.docker.internal, 63128, None)
+26/06/26 14:34:17 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, kubernetes.docker.internal, 63128, None)
+26/06/26 14:34:17 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir.
+26/06/26 14:34:17 INFO SharedState: Warehouse path is 'file:/D:/Coding/%23bigdata/pyspark-test/spark-warehouse'.
+26/06/26 14:34:19 INFO InMemoryFileIndex: It took 80 ms to list leaf files for 1 paths.
+26/06/26 14:34:21 INFO FileSourceStrategy: Pushed Filters:
+26/06/26 14:34:21 INFO FileSourceStrategy: Post-Scan Filters:
+26/06/26 14:34:22 INFO CodeGenerator: Code generated in 334.9891 ms
+26/06/26 14:34:22 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 350.8 KiB, free 2004.3MiB)
+26/06/26 14:34:22 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 34.8 KiB, free 2004.2 MiB)
+26/06/26 14:34:22 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on kubernetes.docker.internal:63128 (size: 34.8 KiB, free: 2004.6 MiB)
+26/06/26 14:34:22 INFO SparkContext: Created broadcast 0 from csv at NativeMethodAccessorImpl.java:0
+26/06/26 14:34:22 INFO FileSourceScanExec: Planning scan with bin packing, max size: 6815745 bytes, open cost is considered as scanning 4194304 bytes.
+26/06/26 14:34:23 INFO DAGScheduler: Registering RDD 3 (csv at NativeMethodAccessorImpl.java:0) as input to shuffle 0
+26/06/26 14:34:23 INFO DAGScheduler: Got map stage job 0 (csv at NativeMethodAccessorImpl.java:0) with 16 output partitions
+26/06/26 14:34:23 INFO DAGScheduler: Final stage: ShuffleMapStage 0 (csv at NativeMethodAccessorImpl.java:0)
+26/06/26 14:34:23 INFO DAGScheduler: Parents of final stage: List()
+26/06/26 14:34:23 INFO DAGScheduler: Missing parents: List()
+26/06/26 14:34:23 INFO DAGScheduler: Submitting ShuffleMapStage 0 (MapPartitionsRDD[3] at csv at NativeMethodAccessorImpl.java:0), which has no missing parents
+26/06/26 14:34:23 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 40.1 KiB, free 2004.2 MiB)
+26/06/26 14:34:23 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 18.3 KiB, free 2004.2 MiB)
+26/06/26 14:34:23 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on kubernetes.docker.internal:63128 (size: 18.3 KiB, free: 2004.5 MiB)
+26/06/26 14:34:23 INFO SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:1585
+26/06/26 14:34:23 INFO DAGScheduler: Submitting 16 missing tasks from ShuffleMapStage 0 (MapPartitionsRDD[3] at csv at NativeMethodAccessorImpl.java:0) (first 15 tasks are for partitions Vector(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14))
+26/06/26 14:34:23 INFO TaskSchedulerImpl: Adding task set 0.0 with 16 tasks resource profile 0
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0) (kubernetes.docker.internal, executor driver, partition 0, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 1.0 in stage 0.0 (TID 1) (kubernetes.docker.internal, executor driver, partition 1, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 2.0 in stage 0.0 (TID 2) (kubernetes.docker.internal, executor driver, partition 2, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 3.0 in stage 0.0 (TID 3) (kubernetes.docker.internal, executor driver, partition 3, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 4.0 in stage 0.0 (TID 4) (kubernetes.docker.internal, executor driver, partition 4, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 5.0 in stage 0.0 (TID 5) (kubernetes.docker.internal, executor driver, partition 5, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 6.0 in stage 0.0 (TID 6) (kubernetes.docker.internal, executor driver, partition 6, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 7.0 in stage 0.0 (TID 7) (kubernetes.docker.internal, executor driver, partition 7, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 8.0 in stage 0.0 (TID 8) (kubernetes.docker.internal, executor driver, partition 8, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 9.0 in stage 0.0 (TID 9) (kubernetes.docker.internal, executor driver, partition 9, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 10.0 in stage 0.0 (TID 10) (kubernetes.docker.internal, executor driver, partition 10, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 11.0 in stage 0.0 (TID 11) (kubernetes.docker.internal, executor driver, partition 11, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 12.0 in stage 0.0 (TID 12) (kubernetes.docker.internal, executor driver, partition 12, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 13.0 in stage 0.0 (TID 13) (kubernetes.docker.internal, executor driver, partition 13, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 14.0 in stage 0.0 (TID 14) (kubernetes.docker.internal, executor driver, partition 14, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO TaskSetManager: Starting task 15.0 in stage 0.0 (TID 15) (kubernetes.docker.internal, executor driver, partition 15, ANY, 8228 bytes)
+26/06/26 14:34:23 INFO Executor: Running task 11.0 in stage 0.0 (TID 11)
+26/06/26 14:34:23 INFO Executor: Running task 15.0 in stage 0.0 (TID 15)
+26/06/26 14:34:23 INFO Executor: Running task 2.0 in stage 0.0 (TID 2)
+26/06/26 14:34:23 INFO Executor: Running task 10.0 in stage 0.0 (TID 10)
+26/06/26 14:34:23 INFO Executor: Running task 12.0 in stage 0.0 (TID 12)
+26/06/26 14:34:23 INFO Executor: Running task 5.0 in stage 0.0 (TID 5)
+26/06/26 14:34:23 INFO Executor: Running task 8.0 in stage 0.0 (TID 8)
+26/06/26 14:34:23 INFO Executor: Running task 13.0 in stage 0.0 (TID 13)
+26/06/26 14:34:23 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+26/06/26 14:34:23 INFO Executor: Running task 3.0 in stage 0.0 (TID 3)
+26/06/26 14:34:23 INFO Executor: Running task 9.0 in stage 0.0 (TID 9)
+26/06/26 14:34:23 INFO Executor: Running task 1.0 in stage 0.0 (TID 1)
+26/06/26 14:34:23 INFO Executor: Running task 4.0 in stage 0.0 (TID 4)
+26/06/26 14:34:23 INFO Executor: Running task 14.0 in stage 0.0 (TID 14)
+26/06/26 14:34:23 INFO Executor: Running task 6.0 in stage 0.0 (TID 6)
+26/06/26 14:34:23 INFO Executor: Running task 7.0 in stage 0.0 (TID 7)
+26/06/26 14:34:23 INFO CodeGenerator: Code generated in 71.5171 ms
+26/06/26 14:34:23 INFO CodeGenerator: Code generated in 27.4863 ms
+26/06/26 14:34:23 INFO CodeGenerator: Code generated in 12.5112 ms
+26/06/26 14:34:24 INFO CodeGenerator: Code generated in 31.2349 ms
+26/06/26 14:34:24 INFO CodeGenerator: Code generated in 12.4053 ms
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 81788940-88604685, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 40894470-47710215, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 13631490-20447235, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 47710215-54525960, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 95420430-102236175, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 61341705-68157450, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 20447235-27262980, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 0-6815745, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 74973195-81788940, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 88604685-95420430, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 6815745-13631490, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 68157450-74973195, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 34078725-40894470, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 102236175-104857621, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 27262980-34078725, partition values: [empty row]
+26/06/26 14:34:24 INFO FileScanRDD: Reading File path: hdfs://localhost:9000/test-folder/input/examplefile-100mb.txt, range: 54525960-61341705, partition values: [empty row]
+26/06/26 14:34:25 INFO Executor: Finished task 15.0 in stage 0.0 (TID 15). 2934 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 15.0 in stage 0.0 (TID 15) in 1884 ms on kubernetes.docker.internal (executor driver) (1/16)
+26/06/26 14:34:25 INFO Executor: Finished task 4.0 in stage 0.0 (TID 4). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO Executor: Finished task 7.0 in stage 0.0 (TID 7). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 4.0 in stage 0.0 (TID 4) in 2025 ms on kubernetes.docker.internal (executor driver) (2/16)
+26/06/26 14:34:25 INFO Executor: Finished task 13.0 in stage 0.0 (TID 13). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO Executor: Finished task 6.0 in stage 0.0 (TID 6). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 7.0 in stage 0.0 (TID 7) in 2044 ms on kubernetes.docker.internal (executor driver) (3/16)
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 6.0 in stage 0.0 (TID 6) in 2045 ms on kubernetes.docker.internal (executor driver) (4/16)
+26/06/26 14:34:25 INFO Executor: Finished task 1.0 in stage 0.0 (TID 1). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO Executor: Finished task 9.0 in stage 0.0 (TID 9). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 13.0 in stage 0.0 (TID 13) in 2046 ms on kubernetes.docker.internal (executor driver) (5/16)
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 1.0 in stage 0.0 (TID 1) in 2058 ms on kubernetes.docker.internal (executor driver) (6/16)
+26/06/26 14:34:25 INFO Executor: Finished task 12.0 in stage 0.0 (TID 12). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 9.0 in stage 0.0 (TID 9) in 2057 ms on kubernetes.docker.internal (executor driver) (7/16)
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 12.0 in stage 0.0 (TID 12) in 2058 ms on kubernetes.docker.internal (executor driver) (8/16)
+26/06/26 14:34:25 INFO Executor: Finished task 14.0 in stage 0.0 (TID 14). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 14.0 in stage 0.0 (TID 14) in 2070 ms on kubernetes.docker.internal (executor driver) (9/16)
+26/06/26 14:34:25 INFO Executor: Finished task 5.0 in stage 0.0 (TID 5). 2934 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 5.0 in stage 0.0 (TID 5) in 2086 ms on kubernetes.docker.internal (executor driver) (10/16)
+26/06/26 14:34:25 INFO Executor: Finished task 2.0 in stage 0.0 (TID 2). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 2.0 in stage 0.0 (TID 2) in 2092 ms on kubernetes.docker.internal (executor driver) (11/16)
+26/06/26 14:34:25 INFO Executor: Finished task 8.0 in stage 0.0 (TID 8). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 8.0 in stage 0.0 (TID 8) in 2090 ms on kubernetes.docker.internal (executor driver) (12/16)
+26/06/26 14:34:25 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 2116 ms on kubernetes.docker.internal (executor driver) (13/16)
+26/06/26 14:34:25 INFO Executor: Finished task 11.0 in stage 0.0 (TID 11). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 11.0 in stage 0.0 (TID 11) in 2092 ms on kubernetes.docker.internal (executor driver) (14/16)
+26/06/26 14:34:25 INFO Executor: Finished task 3.0 in stage 0.0 (TID 3). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 3.0 in stage 0.0 (TID 3) in 2105 ms on kubernetes.docker.internal (executor driver) (15/16)
+26/06/26 14:34:25 INFO Executor: Finished task 10.0 in stage 0.0 (TID 10). 2891 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 10.0 in stage 0.0 (TID 10) in 2115 ms on kubernetes.docker.internal (executor driver) (16/16)
+26/06/26 14:34:25 INFO DAGScheduler: ShuffleMapStage 0 (csv at NativeMethodAccessorImpl.java:0) finished in 2.223 s
+26/06/26 14:34:25 INFO TaskSchedulerImpl: Removed TaskSet 0.0, whose tasks have all completed, from pool
+26/06/26 14:34:25 INFO DAGScheduler: looking for newly runnable stages
+26/06/26 14:34:25 INFO DAGScheduler: running: Set()
+26/06/26 14:34:25 INFO DAGScheduler: waiting: Set()
+26/06/26 14:34:25 INFO DAGScheduler: failed: Set()
+26/06/26 14:34:25 INFO ShufflePartitionsUtil: For shuffle(0), advisory target size: 67108864, actual target size 1048576, minimum partition size: 1048576
+26/06/26 14:34:25 INFO FileOutputCommitter: File Output Committer Algorithm version is 1
+26/06/26 14:34:25 INFO FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+26/06/26 14:34:25 INFO SQLHadoopMapReduceCommitProtocol: Using output committer class org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter
+26/06/26 14:34:25 INFO HashAggregateExec: spark.sql.codegen.aggregate.map.twolevel.enabled is set to true, but current version of codegened fast hashmap does not support this aggregate.
+26/06/26 14:34:25 INFO CodeGenerator: Code generated in 23.76 ms
+26/06/26 14:34:25 INFO SparkContext: Starting job: csv at NativeMethodAccessorImpl.java:0
+26/06/26 14:34:25 INFO DAGScheduler: Got job 1 (csv at NativeMethodAccessorImpl.java:0) with 1 output partitions
+26/06/26 14:34:25 INFO DAGScheduler: Final stage: ResultStage 2 (csv at NativeMethodAccessorImpl.java:0)
+26/06/26 14:34:25 INFO DAGScheduler: Parents of final stage: List(ShuffleMapStage 1)
+26/06/26 14:34:25 INFO DAGScheduler: Missing parents: List()
+26/06/26 14:34:25 INFO DAGScheduler: Submitting ResultStage 2 (MapPartitionsRDD[6] at csv at NativeMethodAccessorImpl.java:0), which has no missing parents
+26/06/26 14:34:25 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 242.9 KiB, free 2003.9MiB)
+26/06/26 14:34:25 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 91.0 KiB, free 2003.8 MiB)
+26/06/26 14:34:25 INFO BlockManagerInfo: Added broadcast_2_piece0 in memory on kubernetes.docker.internal:63128 (size: 91.0 KiB, free: 2004.5 MiB)
+26/06/26 14:34:25 INFO SparkContext: Created broadcast 2 from broadcast at DAGScheduler.scala:1585
+26/06/26 14:34:25 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 2 (MapPartitionsRDD[6] at csv at NativeMethodAccessorImpl.java:0) (first 15 tasks are for partitions Vector(0))
+26/06/26 14:34:25 INFO TaskSchedulerImpl: Adding task set 2.0 with 1 tasks resource profile 0
+26/06/26 14:34:25 INFO TaskSetManager: Starting task 0.0 in stage 2.0 (TID 16) (kubernetes.docker.internal, executor driver, partition 0, NODE_LOCAL, 7615 bytes)
+26/06/26 14:34:25 INFO Executor: Running task 0.0 in stage 2.0 (TID 16)
+26/06/26 14:34:25 INFO ShuffleBlockFetcherIterator: Getting 16 (6.4 KiB) non-empty blocks including 16 (6.4 KiB) local and 0 (0.0 B) host-local and 0 (0.0 B) push-merged-local and 0 (0.0 B) remote blocks
+26/06/26 14:34:25 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 13 ms
+26/06/26 14:34:25 INFO CodeGenerator: Code generated in 10.9493 ms
+26/06/26 14:34:25 INFO FileOutputCommitter: File Output Committer Algorithm version is 1
+26/06/26 14:34:25 INFO FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+26/06/26 14:34:25 INFO SQLHadoopMapReduceCommitProtocol: Using output committer class org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter
+26/06/26 14:34:25 INFO FileOutputCommitter: Saved output of task 'attempt_202606261434252757641927770128495_0002_m_000000_16' to hdfs://localhost:9000/test-folder/output-spark/_temporary/0/task_202606261434252757641927770128495_0002_m_000000
+26/06/26 14:34:25 INFO SparkHadoopMapRedUtil: attempt_202606261434252757641927770128495_0002_m_000000_16: Committed. Elapsed time: 6 ms.
+26/06/26 14:34:25 INFO Executor: Finished task 0.0 in stage 2.0 (TID 16). 6249 bytes result sent to driver
+26/06/26 14:34:25 INFO TaskSetManager: Finished task 0.0 in stage 2.0 (TID 16) in 272 ms on kubernetes.docker.internal (executor driver) (1/1)
+26/06/26 14:34:25 INFO TaskSchedulerImpl: Removed TaskSet 2.0, whose tasks have all completed, from pool
+26/06/26 14:34:25 INFO DAGScheduler: ResultStage 2 (csv at NativeMethodAccessorImpl.java:0) finished in 0.324 s
+26/06/26 14:34:25 INFO DAGScheduler: Job 1 is finished. Cancelling potential speculative or zombie tasks for this job
+26/06/26 14:34:25 INFO TaskSchedulerImpl: Killing all running tasks in stage 2: Stage finished
+26/06/26 14:34:25 INFO DAGScheduler: Job 1 finished: csv at NativeMethodAccessorImpl.java:0, took 0.346586 s
+26/06/26 14:34:25 INFO FileFormatWriter: Start to commit write Job 33470d60-f9ee-46e8-8c8d-a03c7afe9cdd.
+26/06/26 14:34:25 INFO FileFormatWriter: Write Job 33470d60-f9ee-46e8-8c8d-a03c7afe9cdd committed. Elapsed time: 21 ms.
+26/06/26 14:34:25 INFO FileFormatWriter: Finished processing stats for write job 33470d60-f9ee-46e8-8c8d-a03c7afe9cdd.
+
+========================================
+     PYSPARK BENCHMARK RESULTS
+========================================
+Total Seconds : 8.328
+Total Milliseconds : 8328.0542
+========================================
+
+26/06/26 14:34:25 INFO SparkContext: SparkContext is stopping with exitCode 0.
+26/06/26 14:34:25 INFO SparkUI: Stopped Spark web UI at http://kubernetes.docker.internal:4040
+26/06/26 14:34:25 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+26/06/26 14:34:26 INFO MemoryStore: MemoryStore cleared
+26/06/26 14:34:26 INFO BlockManager: BlockManager stopped
+26/06/26 14:34:26 INFO BlockManagerMaster: BlockManagerMaster stopped
+26/06/26 14:34:26 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+26/06/26 14:34:26 INFO SparkContext: Successfully stopped SparkContext
+26/06/26 14:34:26 INFO ShutdownHookManager: Shutdown hook called
+26/06/26 14:34:26 INFO ShutdownHookManager: Deleting directory C:\Users\Administrator\AppData\Local\Temp\spark-2bc18fe0-6dff-4f4a-b990-d0ed87b2ad77
+26/06/26 14:34:26 INFO ShutdownHookManager: Deleting directory C:\Users\Administrator\AppData\Local\Temp\spark-c93a3b6b-284f-490d-b9ff-f52c63b45f05
+26/06/26 14:34:26 INFO ShutdownHookManager: Deleting directory C:\Users\Administrator\AppData\Local\Temp\spark-c93a3b6b-284f-490d-b9ff-f52c63b45f05\pyspark-d0ecbb5c-4e13-4349-b222-7132000b6e1f
+26/06/26 14:34:26 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\Administrator\AppData\Local\Temp\spark-c93a3b6b-284f-490d-b9ff-f52c63b45f05\pyspark-d0ecbb5c-4e13-4349-b222-7132000b6e1f
+java.nio.file.NoSuchFileException: C:\Users\Administrator\AppData\Local\Temp\spark-c93a3b6b-284f-490d-b9ff-f52c63b45f05\pyspark-d0ecbb5c-4e13-4349-b222-7132000b6e1f
+        at sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:79)
+        at sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:97)
+        at sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:102)
+        at sun.nio.fs.WindowsFileAttributeViews$Basic.readAttributes(WindowsFileAttributeViews.java:53)
+        at sun.nio.fs.WindowsFileAttributeViews$Basic.readAttributes(WindowsFileAttributeViews.java:38)
+        at sun.nio.fs.WindowsFileSystemProvider.readAttributes(WindowsFileSystemProvider.java:197)
+        at java.nio.file.Files.readAttributes(Files.java:1737)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:124)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:117)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:90)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:121)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:120)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1126)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:65)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:62)
+        at scala.collection.IndexedSeqOptimized.foreach(IndexedSeqOptimized.scala:36)
+        at scala.collection.IndexedSeqOptimized.foreach$(IndexedSeqOptimized.scala:33)
+        at scala.collection.mutable.ArrayOps$ofRef.foreach(ArrayOps.scala:198)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:62)
+        at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:214)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:188)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1928)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:188)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+        at scala.util.Try$.apply(Try.scala:213)
+        at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:188)
+        at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:178)
+        at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:750)
+
+D:\Coding\#bigdata\pyspark-test>

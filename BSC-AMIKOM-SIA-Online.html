@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSC – Sistem Informasi Akademik Pembelajaran Online | AMIKOM</title>
+<style>
+  :root {
+    --primary: #1a237e;
+    --primary-light: #3949ab;
+    --financial: #1565c0;
+    --stakeholder: #2e7d32;
+    --internal: #e65100;
+    --learning: #6a1b9a;
+    --accent: #ffd600;
+    --bg: #f5f6fa;
+    --white: #ffffff;
+    --text: #212121;
+    --muted: #546e7a;
+    --border: #e0e0e0;
+    --shadow: 0 2px 12px rgba(0,0,0,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--white); padding: 36px 48px 28px; position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; right: -60px; top: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .header h1 { font-size: 26px; font-weight: 700; letter-spacing: .3px; line-height: 1.3; }
+  .header .subtitle { font-size: 14px; opacity: .82; margin-top: 6px; }
+  .header .tag {
+    display: inline-block; background: var(--accent); color: var(--primary);
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 12px; text-transform: uppercase; letter-spacing: .8px;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav { display: flex; gap: 8px; padding: 18px 48px; background: var(--white); box-shadow: 0 1px 4px rgba(0,0,0,.08); flex-wrap: wrap; }
+  .nav a {
+    text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 16px;
+    border-radius: 20px; color: var(--muted); border: 1.5px solid var(--border);
+    transition: all .2s;
+  }
+  .nav a:hover, .nav a.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+  /* ── MAIN LAYOUT ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 20px; font-weight: 700; color: var(--primary);
+    border-left: 5px solid var(--accent); padding-left: 14px;
+    margin: 40px 0 20px;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* ── CARD ── */
+  .card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 28px; }
+
+  /* ── VMTS GRID ── */
+  .vmts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .vmts-box {
+    border-radius: 10px; padding: 20px 18px; border-top: 4px solid;
+    background: var(--white); box-shadow: var(--shadow);
+  }
+  .vmts-box.v { border-color: var(--primary); }
+  .vmts-box.m { border-color: var(--stakeholder); }
+  .vmts-box.t { border-color: var(--internal); }
+  .vmts-box.s { border-color: var(--learning); }
+  .vmts-box h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 10px; }
+  .vmts-box.v h3 { color: var(--primary); }
+  .vmts-box.m h3 { color: var(--stakeholder); }
+  .vmts-box.t h3 { color: var(--internal); }
+  .vmts-box.s h3 { color: var(--learning); }
+  .vmts-box p, .vmts-box ul { font-size: 13px; line-height: 1.65; color: var(--text); }
+  .vmts-box ul { padding-left: 16px; }
+  .vmts-box ul li { margin-bottom: 4px; }
+
+  /* ── BSC TABLE ── */
+  .bsc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .bsc-table th {
+    padding: 12px 14px; text-align: left; font-weight: 700;
+    font-size: 11px; text-transform: uppercase; letter-spacing: .8px;
+  }
+  .bsc-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  .bsc-table tr:last-child td { border-bottom: none; }
+  .bsc-table tr:hover td { background: #fafafa; }
+
+  /* perspective header rows */
+  .bsc-table .row-financial th { background: #e3f0fb; color: var(--financial); }
+  .bsc-table .row-stakeholder th { background: #e8f5e9; color: var(--stakeholder); }
+  .bsc-table .row-internal th { background: #fff3e0; color: var(--internal); }
+  .bsc-table .row-learning th { background: #f3e5f5; color: var(--learning); }
+
+  /* left label cells */
+  .bsc-table .label-financial { background: #e3f0fb; color: var(--financial); font-weight: 700; font-size: 12px; border-radius: 4px; }
+  .bsc-table .label-stakeholder { background: #e8f5e9; color: var(--stakeholder); font-weight: 700; font-size: 12px; }
+  .bsc-table .label-internal { background: #fff3e0; color: var(--internal); font-weight: 700; font-size: 12px; }
+  .bsc-table .label-learning { background: #f3e5f5; color: var(--learning); font-weight: 700; font-size: 12px; }
+
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 9px;
+    border-radius: 12px; margin-bottom: 3px;
+  }
+  .badge-financial { background: #e3f0fb; color: var(--financial); }
+  .badge-stakeholder { background: #e8f5e9; color: var(--stakeholder); }
+  .badge-internal { background: #fff3e0; color: var(--internal); }
+  .badge-learning { background: #f3e5f5; color: var(--learning); }
+
+  .kpi-chip {
+    display: inline-block; background: #f1f3f4; border: 1px solid #e0e0e0;
+    border-radius: 6px; padding: 4px 10px; font-size: 12px; margin: 3px 3px 3px 0;
+  }
+  .target-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; color: var(--white);
+    background: #546e7a; border-radius: 10px; padding: 2px 8px; margin-left: 4px;
+  }
+  .target-badge.green { background: #2e7d32; }
+  .target-badge.blue { background: #1565c0; }
+  .target-badge.orange { background: #e65100; }
+  .target-badge.purple { background: #6a1b9a; }
+
+  /* ── STRATEGY MAP ── */
+  .strategy-map {
+    background: var(--white); border-radius: 12px; box-shadow: var(--shadow);
+    padding: 36px 32px; margin-bottom: 28px;
+  }
+  .map-title { text-align: center; font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  .map-sub { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 32px; }
+
+  .map-grid { display: flex; flex-direction: column; gap: 0; align-items: center; }
+
+  .map-row { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; margin-bottom: 0; }
+
+  .map-layer {
+    width: 100%; border-radius: 10px; padding: 18px 24px;
+    display: flex; flex-direction: column; position: relative;
+  }
+  .map-layer.financial { background: linear-gradient(135deg, #1565c0, #1976d2); }
+  .map-layer.stakeholder { background: linear-gradient(135deg, #2e7d32, #388e3c); }
+  .map-layer.internal { background: linear-gradient(135deg, #e65100, #f57c00); }
+  .map-layer.learning { background: linear-gradient(135deg, #6a1b9a, #7b1fa2); }
+
+  .map-layer-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: rgba(255,255,255,0.75); margin-bottom: 12px;
+  }
+  .map-items { display: flex; gap: 12px; flex-wrap: wrap; }
+  .map-item {
+    background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.30);
+    border-radius: 8px; padding: 12px 16px; color: var(--white);
+    font-size: 13px; font-weight: 600; flex: 1; min-width: 200px;
+    line-height: 1.4; backdrop-filter: blur(4px);
+  }
+  .map-item .item-icon { font-size: 18px; margin-bottom: 6px; display: block; }
+  .map-item .item-kpi { font-size: 11px; opacity: .8; margin-top: 4px; font-weight: 400; }
+
+  .map-arrow {
+    display: flex; justify-content: center; align-items: center;
+    padding: 8px 0; color: var(--muted); font-size: 22px;
+  }
+  .arrow-label {
+    font-size: 11px; color: var(--muted); text-align: center;
+    font-style: italic; margin-top: 2px;
+  }
+
+  .cause-effect-note {
+    display: flex; align-items: center; gap: 8px; justify-content: center;
+    margin-top: 24px; font-size: 12px; color: var(--muted);
+    background: #f5f6fa; border-radius: 8px; padding: 10px 20px;
+  }
+
+  /* ── KPI SUMMARY TABLE ── */
+  .kpi-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .kpi-table th { padding: 11px 14px; text-align: left; background: var(--primary); color: var(--white); font-size: 12px; font-weight: 600; }
+  .kpi-table th:first-child { border-radius: 8px 0 0 0; }
+  .kpi-table th:last-child { border-radius: 0 8px 0 0; }
+  .kpi-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .kpi-table tr:last-child td { border-bottom: none; }
+  .kpi-table tr:nth-child(even) td { background: #fafafa; }
+
+  /* ── FOOTER ── */
+  .footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 48px; padding-bottom: 24px; }
+  .footer strong { color: var(--primary); }
+
+  /* ── PRINT ── */
+  @media print {
+    .nav, .header::after { display: none; }
+    body { background: white; }
+    .card, .strategy-map { box-shadow: none; border: 1px solid #ddd; }
+    .section-title { page-break-before: always; }
+    .section-title:first-child { page-break-before: auto; }
+  }
+  @media (max-width: 900px) {
+    .vmts-grid { grid-template-columns: 1fr 1fr; }
+    .header { padding: 24px; }
+    .container { padding: 16px; }
+  }
+  @media (max-width: 600px) {
+    .vmts-grid { grid-template-columns: 1fr; }
+    .map-items { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="tag">IT Project Management · Minggu 12 · BSC</div>
+  <h1>Balanced Scorecard<br>Sistem Informasi Akademik Pembelajaran Online</h1>
+  <div class="subtitle">Universitas AMIKOM Yogyakarta &nbsp;·&nbsp; Program S2 Informatika &nbsp;·&nbsp; 2025/2026</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#vmts" class="active">VMTS</a>
+  <a href="#bsc">Balanced Scorecard</a>
+  <a href="#strategy-map">Strategy Map</a>
+  <a href="#kpi-summary">Ringkasan KPI</a>
+</nav>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 1 · VMTS
+  ══════════════════════════════════════════════════ -->
+  <div class="section-title" id="vmts">1. VMTS — Vision, Mission, Tujuan Strategis &amp; Strategi</div>
+
+  <div class="vmts-grid">
+
+    <div class="vmts-box v">
+      <h3>🎯 Visi</h3>
+      <p>Menjadi institusi pendidikan digital yang unggul, inovatif, dan berdaya saing global melalui Sistem Informasi Akademik Pembelajaran Online yang terintegrasi dan berkualitas.</p>
+    </div>
+
+    <div class="vmts-box m">
+      <h3>📋 Misi</h3>
+      <ul>
+        <li>Mengembangkan sistem informasi akademik yang inovatif, terintegrasi, dan mudah diakses seluruh sivitas akademika.</li>
+        <li>Meningkatkan kualitas pengalaman pembelajaran online berbasis teknologi terkini.</li>
+        <li>Mendorong efisiensi operasional melalui digitalisasi dan otomasi layanan akademik.</li>
+        <li>Membangun kapabilitas SDM yang adaptif dan kompeten dalam ekosistem pendidikan digital.</li>
+      </ul>
+    </div>
+
+    <div class="vmts-box t">
+      <h3>🏆 Tujuan Strategis</h3>
+      <ul>
+        <li>Meningkatkan efektivitas dan kualitas layanan akademik digital bagi mahasiswa dan dosen.</li>
+        <li>Meningkatkan kepuasan pengguna (mahasiswa, dosen, staf) terhadap sistem pembelajaran online.</li>
+        <li>Mengoptimalkan efisiensi biaya operasional melalui pemanfaatan platform terintegrasi.</li>
+        <li>Membangun kapabilitas SDM dan budaya inovasi digital yang berkelanjutan.</li>
+      </ul>
+    </div>
+
+    <div class="vmts-box s">
+      <h3>⚙️ Strategi</h3>
+      <ul>
+        <li>Pengembangan platform LMS <em>mobile-friendly</em> dengan integrasi SSO dan cloud hosting.</li>
+        <li>Otomasi jadwal akademik, pengingat, dan notifikasi berbasis AI.</li>
+        <li>Program pelatihan literasi digital berkelanjutan untuk dosen dan staf.</li>
+        <li>Digitalisasi konten pembelajaran dengan multimedia interaktif dan <em>feedback real-time</em>.</li>
+      </ul>
+    </div>
+
+  </div><!-- /vmts-grid -->
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 2 · BALANCED SCORECARD
+  ══════════════════════════════════════════════════ -->
+  <div class="section-title" id="bsc">2. Balanced Scorecard — 4 Perspektif</div>
+
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table class="bsc-table">
+      <colgroup>
+        <col style="width:14%">
+        <col style="width:26%">
+        <col style="width:26%">
+        <col style="width:16%">
+        <col style="width:18%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th style="background:#1a237e;color:#fff;padding:14px 16px;font-size:12px;">Perspektif</th>
+          <th style="background:#1a237e;color:#fff;padding:14px 16px;font-size:12px;">Sasaran Strategis</th>
+          <th style="background:#1a237e;color:#fff;padding:14px 16px;font-size:12px;">KPI (Indikator)</th>
+          <th style="background:#1a237e;color:#fff;padding:14px 16px;font-size:12px;">Target</th>
+          <th style="background:#1a237e;color:#fff;padding:14px 16px;font-size:12px;">Sumber Data</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- FINANCIAL -->
+        <tr>
+          <td class="label-financial" rowspan="4" style="text-align:center;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);padding:20px 10px;">
+            💰 Financial
+          </td>
+          <td>Efisiensi biaya operasional sistem akademik meningkat</td>
+          <td><strong>Persentase penurunan biaya operasional TI</strong></td>
+          <td><span class="target-badge blue">≥ 15%</span></td>
+          <td>Laporan Keuangan</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Tingkat pemanfaatan lisensi platform LMS</strong></td>
+          <td><span class="target-badge blue">≥ 90%</span></td>
+          <td>Laporan Lisensi IT</td>
+        </tr>
+        <tr>
+          <td>ROI investasi teknologi pendidikan tercapai</td>
+          <td><strong>Return on Investment (ROI) sistem akademik</strong></td>
+          <td><span class="target-badge blue">≥ 120%</span></td>
+          <td>Analisis Finansial</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Rasio biaya per pengguna aktif sistem</strong></td>
+          <td><span class="target-badge blue">Turun 20%</span></td>
+          <td>Laporan IT &amp; Keuangan</td>
+        </tr>
+
+        <!-- STAKEHOLDER -->
+        <tr>
+          <td class="label-stakeholder" rowspan="4" style="text-align:center;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);padding:20px 10px;background:#e8f5e9;color:#2e7d32;">
+            🎓 Stakeholder
+          </td>
+          <td>Kepuasan mahasiswa terhadap layanan pembelajaran online meningkat</td>
+          <td><strong>Indeks Kepuasan Mahasiswa (IKM)</strong></td>
+          <td><span class="target-badge green">≥ 85%</span></td>
+          <td>Survei Mahasiswa</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Net Promoter Score (NPS) layanan akademik</strong></td>
+          <td><span class="target-badge green">≥ 70</span></td>
+          <td>Survei NPS</td>
+        </tr>
+        <tr>
+          <td>Aksesibilitas dan inklusivitas pembelajaran digital meningkat</td>
+          <td><strong>Persentase akses sistem tanpa kendala teknis</strong></td>
+          <td><span class="target-badge green">≥ 95%</span></td>
+          <td>Log LMS &amp; Helpdesk</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Persentase mahasiswa aktif menggunakan LMS</strong></td>
+          <td><span class="target-badge green">≥ 90%</span></td>
+          <td>Laporan LMS</td>
+        </tr>
+
+        <!-- INTERNAL PROCESS -->
+        <tr>
+          <td class="label-internal" rowspan="4" style="text-align:center;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);padding:20px 10px;background:#fff3e0;color:#e65100;">
+            ⚙️ Internal Process
+          </td>
+          <td>Proses pembelajaran dan layanan akademik online berjalan efektif</td>
+          <td><strong>Persentase kelas online sesuai jadwal</strong></td>
+          <td><span class="target-badge orange">≥ 95%</span></td>
+          <td>Laporan Akademik</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Uptime sistem akademik online</strong></td>
+          <td><span class="target-badge orange">≥ 99%</span></td>
+          <td>Monitoring Sistem</td>
+        </tr>
+        <tr>
+          <td>Kualitas dan kelengkapan konten pembelajaran meningkat</td>
+          <td><strong>Tingkat kelengkapan materi pembelajaran di LMS</strong></td>
+          <td><span class="target-badge orange">≥ 90%</span></td>
+          <td>Audit Konten LMS</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Waktu rata-rata respons helpdesk akademik</strong></td>
+          <td><span class="target-badge orange">≤ 24 jam</span></td>
+          <td>Tiket Helpdesk</td>
+        </tr>
+
+        <!-- LEARNING & GROWTH -->
+        <tr>
+          <td class="label-learning" rowspan="4" style="text-align:center;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);padding:20px 10px;background:#f3e5f5;color:#6a1b9a;">
+            🌱 Learning &amp; Growth
+          </td>
+          <td>Kompetensi dosen dan staf dalam teknologi digital meningkat</td>
+          <td><strong>Persentase dosen lulus pelatihan sistem digital</strong></td>
+          <td><span class="target-badge purple">≥ 90%</span></td>
+          <td>Laporan Pelatihan</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Jumlah program literasi digital per tahun</strong></td>
+          <td><span class="target-badge purple">≥ 4 program</span></td>
+          <td>Laporan SDM</td>
+        </tr>
+        <tr>
+          <td>Budaya inovasi digital dan adopsi teknologi berkembang</td>
+          <td><strong>Tingkat adopsi fitur baru sistem oleh pengguna</strong></td>
+          <td><span class="target-badge purple">≥ 85%</span></td>
+          <td>Analytics LMS</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><strong>Jumlah inisiatif inovasi digital yang diimplementasikan</strong></td>
+          <td><span class="target-badge purple">≥ 3/tahun</span></td>
+          <td>Laporan R&amp;D</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div><!-- /card bsc table -->
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 3 · STRATEGY MAP
+  ══════════════════════════════════════════════════ -->
+  <div class="section-title" id="strategy-map">3. Strategy Map — Hubungan Sebab–Akibat</div>
+
+  <div class="strategy-map">
+    <div class="map-title">Strategy Map BSC · Sistem Informasi Akademik Pembelajaran Online AMIKOM</div>
+    <div class="map-sub">Alur sebab–akibat: Learning &amp; Growth → Internal Process → Stakeholder → Financial</div>
+
+    <div class="map-grid">
+
+      <!-- ROW 1: FINANCIAL (TOP) -->
+      <div class="map-row">
+        <div class="map-layer financial">
+          <div class="map-layer-label">💰 Financial — Perspektif Keuangan</div>
+          <div class="map-items">
+            <div class="map-item">
+              <span class="item-icon">📉</span>
+              Efisiensi Biaya Operasional TI
+              <div class="item-kpi">KPI: Penurunan biaya ≥ 15%</div>
+            </div>
+            <div class="map-item">
+              <span class="item-icon">📈</span>
+              ROI Investasi Teknologi Pendidikan
+              <div class="item-kpi">KPI: ROI ≥ 120%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW DOWN -->
+      <div class="map-arrow">▲</div>
+      <div class="arrow-label">Layanan berkualitas mendorong efisiensi &amp; nilai investasi</div>
+
+      <!-- ROW 2: STAKEHOLDER -->
+      <div class="map-row">
+        <div class="map-layer stakeholder">
+          <div class="map-layer-label">🎓 Stakeholder — Perspektif Pelanggan</div>
+          <div class="map-items">
+            <div class="map-item">
+              <span class="item-icon">😊</span>
+              Kepuasan Mahasiswa Meningkat
+              <div class="item-kpi">KPI: IKM ≥ 85% · NPS ≥ 70</div>
+            </div>
+            <div class="map-item">
+              <span class="item-icon">🌐</span>
+              Aksesibilitas Pembelajaran Inklusif
+              <div class="item-kpi">KPI: Akses tanpa kendala ≥ 95%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW DOWN -->
+      <div class="map-arrow">▲</div>
+      <div class="arrow-label">Proses yang efektif menghasilkan pengalaman belajar yang baik</div>
+
+      <!-- ROW 3: INTERNAL PROCESS -->
+      <div class="map-row">
+        <div class="map-layer internal">
+          <div class="map-layer-label">⚙️ Internal Process — Perspektif Proses Internal</div>
+          <div class="map-items">
+            <div class="map-item">
+              <span class="item-icon">📅</span>
+              Proses Pembelajaran Online Efektif
+              <div class="item-kpi">KPI: Kelas sesuai jadwal ≥ 95% · Uptime ≥ 99%</div>
+            </div>
+            <div class="map-item">
+              <span class="item-icon">📚</span>
+              Kualitas Konten LMS Meningkat
+              <div class="item-kpi">KPI: Kelengkapan materi ≥ 90%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW DOWN -->
+      <div class="map-arrow">▲</div>
+      <div class="arrow-label">SDM kompeten memungkinkan proses internal yang unggul</div>
+
+      <!-- ROW 4: LEARNING & GROWTH (BOTTOM) -->
+      <div class="map-row">
+        <div class="map-layer learning">
+          <div class="map-layer-label">🌱 Learning &amp; Growth — Perspektif Pembelajaran &amp; Pertumbuhan</div>
+          <div class="map-items">
+            <div class="map-item">
+              <span class="item-icon">👩‍🏫</span>
+              Kompetensi Digital Dosen &amp; Staf
+              <div class="item-kpi">KPI: Lulus pelatihan ≥ 90%</div>
+            </div>
+            <div class="map-item">
+              <span class="item-icon">💡</span>
+              Budaya Inovasi &amp; Adopsi Teknologi
+              <div class="item-kpi">KPI: Adopsi fitur ≥ 85% · Inovasi ≥ 3/tahun</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /map-grid -->
+
+    <div class="cause-effect-note">
+      <span>🔗</span>
+      <span><strong>Logika Sebab-Akibat:</strong> Peningkatan kompetensi SDM (<em>Learning &amp; Growth</em>) → mendorong keunggulan proses internal (<em>Internal Process</em>) → meningkatkan kepuasan stakeholder (<em>Stakeholder</em>) → menghasilkan efisiensi dan ROI optimal (<em>Financial</em>)</span>
+    </div>
+  </div><!-- /strategy-map -->
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 4 · KPI SUMMARY TABLE
+  ══════════════════════════════════════════════════ -->
+  <div class="section-title" id="kpi-summary">4. Ringkasan KPI per Perspektif BSC</div>
+
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table class="kpi-table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Perspektif</th>
+          <th>Sasaran Strategis</th>
+          <th>KPI (Indikator)</th>
+          <th>Target</th>
+          <th>Sumber Data</th>
+          <th>Inisiatif / Proyek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Financial -->
+        <tr>
+          <td>1</td>
+          <td><span class="badge badge-financial">Financial</span></td>
+          <td>Efisiensi biaya operasional TI meningkat</td>
+          <td>Persentase penurunan biaya operasional TI</td>
+          <td><strong>≥ 15%</strong></td>
+          <td>Laporan Keuangan</td>
+          <td>Migrasi cloud &amp; optimasi lisensi platform</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span class="badge badge-financial">Financial</span></td>
+          <td>Efisiensi biaya operasional TI meningkat</td>
+          <td>Tingkat pemanfaatan lisensi platform LMS</td>
+          <td><strong>≥ 90%</strong></td>
+          <td>Laporan Lisensi IT</td>
+          <td>Audit &amp; rasionalisasi lisensi software</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><span class="badge badge-financial">Financial</span></td>
+          <td>ROI investasi teknologi tercapai</td>
+          <td>Return on Investment (ROI) sistem akademik</td>
+          <td><strong>≥ 120%</strong></td>
+          <td>Analisis Finansial</td>
+          <td>Dashboard ROI proyek TI</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><span class="badge badge-financial">Financial</span></td>
+          <td>ROI investasi teknologi tercapai</td>
+          <td>Rasio biaya per pengguna aktif sistem</td>
+          <td><strong>Turun 20%</strong></td>
+          <td>Laporan IT &amp; Keuangan</td>
+          <td>Optimasi infrastruktur shared hosting</td>
+        </tr>
+        <!-- Stakeholder -->
+        <tr>
+          <td>5</td>
+          <td><span class="badge badge-stakeholder">Stakeholder</span></td>
+          <td>Kepuasan mahasiswa meningkat</td>
+          <td>Indeks Kepuasan Mahasiswa (IKM)</td>
+          <td><strong>≥ 85%</strong></td>
+          <td>Survei Mahasiswa</td>
+          <td>Pengembangan fitur feedback real-time di LMS</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><span class="badge badge-stakeholder">Stakeholder</span></td>
+          <td>Kepuasan mahasiswa meningkat</td>
+          <td>Net Promoter Score (NPS) layanan akademik</td>
+          <td><strong>≥ 70</strong></td>
+          <td>Survei NPS</td>
+          <td>Program customer experience akademik</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><span class="badge badge-stakeholder">Stakeholder</span></td>
+          <td>Aksesibilitas pembelajaran inklusif</td>
+          <td>Persentase akses sistem tanpa kendala teknis</td>
+          <td><strong>≥ 95%</strong></td>
+          <td>Log LMS &amp; Helpdesk</td>
+          <td>Implementasi mobile-friendly LMS &amp; SSO</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><span class="badge badge-stakeholder">Stakeholder</span></td>
+          <td>Aksesibilitas pembelajaran inklusif</td>
+          <td>Persentase mahasiswa aktif menggunakan LMS</td>
+          <td><strong>≥ 90%</strong></td>
+          <td>Laporan LMS</td>
+          <td>Kampanye adopsi LMS &amp; onboarding mahasiswa</td>
+        </tr>
+        <!-- Internal Process -->
+        <tr>
+          <td>9</td>
+          <td><span class="badge badge-internal">Internal Process</span></td>
+          <td>Proses pembelajaran online efektif</td>
+          <td>Persentase kelas online sesuai jadwal</td>
+          <td><strong>≥ 95%</strong></td>
+          <td>Laporan Akademik</td>
+          <td>Otomasi jadwal &amp; reminder berbasis AI</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><span class="badge badge-internal">Internal Process</span></td>
+          <td>Proses pembelajaran online efektif</td>
+          <td>Uptime sistem akademik online</td>
+          <td><strong>≥ 99%</strong></td>
+          <td>Monitoring Sistem</td>
+          <td>Migrasi ke cloud hosting &amp; disaster recovery</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><span class="badge badge-internal">Internal Process</span></td>
+          <td>Kualitas konten pembelajaran meningkat</td>
+          <td>Tingkat kelengkapan materi pembelajaran di LMS</td>
+          <td><strong>≥ 90%</strong></td>
+          <td>Audit Konten LMS</td>
+          <td>Digitalisasi materi &amp; integrasi multimedia interaktif</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><span class="badge badge-internal">Internal Process</span></td>
+          <td>Kualitas konten pembelajaran meningkat</td>
+          <td>Waktu rata-rata respons helpdesk akademik</td>
+          <td><strong>≤ 24 jam</strong></td>
+          <td>Tiket Helpdesk</td>
+          <td>Sistem ticketing &amp; SLA helpdesk otomatis</td>
+        </tr>
+        <!-- Learning & Growth -->
+        <tr>
+          <td>13</td>
+          <td><span class="badge badge-learning">Learning &amp; Growth</span></td>
+          <td>Kompetensi digital dosen meningkat</td>
+          <td>Persentase dosen lulus pelatihan sistem digital</td>
+          <td><strong>≥ 90%</strong></td>
+          <td>Laporan Pelatihan</td>
+          <td>Program pelatihan &amp; sertifikasi digital dosen</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><span class="badge badge-learning">Learning &amp; Growth</span></td>
+          <td>Kompetensi digital dosen meningkat</td>
+          <td>Jumlah program literasi digital per tahun</td>
+          <td><strong>≥ 4 program</strong></td>
+          <td>Laporan SDM</td>
+          <td>Webinar &amp; workshop literasi digital rutin</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><span class="badge badge-learning">Learning &amp; Growth</span></td>
+          <td>Budaya inovasi digital berkembang</td>
+          <td>Tingkat adopsi fitur baru sistem oleh pengguna</td>
+          <td><strong>≥ 85%</strong></td>
+          <td>Analytics LMS</td>
+          <td>Change management &amp; user adoption program</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><span class="badge badge-learning">Learning &amp; Growth</span></td>
+          <td>Budaya inovasi digital berkembang</td>
+          <td>Jumlah inisiatif inovasi digital diimplementasikan</td>
+          <td><strong>≥ 3/tahun</strong></td>
+          <td>Laporan R&amp;D</td>
+          <td>Innovation lab &amp; hackathon akademik tahunan</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <strong>Universitas AMIKOM Yogyakarta</strong> · S2 Informatika · IT Project Management · Semester Genap 2025/2026<br>
+    Disusun berdasarkan materi Pertemuan 12 – BSC &amp; PMBOK 7 · Dosen: Emha Taufiq Luthfi, S.T., M.Kom., Ph.D
+  </div>
+
+</div><!-- /container -->
+</body>
+</html>
